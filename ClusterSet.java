@@ -1,29 +1,45 @@
+
 class ClusterSet {
 
-    private Cluster C[];
-    private int lastClusterIndex = 0;
+    private Cluster[] C;
+    private int lastClusterIndex=0;
 
-    ClusterSet(int k) {
-        C = new Cluster[k];
+    ClusterSet(int k){
+        C=new Cluster[k];
     }
 
-    void add(Cluster c) {
-        for (int j = 0; j < lastClusterIndex; j++)
-            if (c == C[j]) // to avoid duplicates
+    void add(Cluster c){
+        for(int j=0;j<lastClusterIndex;j++)
+            if(c==C[j]) // to avoid duplicates
                 return;
-        C[lastClusterIndex] = c;
+        C[lastClusterIndex]=c;
         lastClusterIndex++;
     }
 
-    Cluster get(int i) {
+    Cluster get(int i){
         return C[i];
     }
 
-    public String toString() {
-        String str = "";
-        for (int i = 0; i < C.length; i++) {
-            if (C[i] != null) {
-                str += "cluster" + i + ":" + C[i] + "\n";
+    int getLastClusterIndex(){
+        return lastClusterIndex;
+    }
+
+    public String toString(){
+        String str="";
+        for(int i=0;i<C.length;i++){
+            if (C[i]!=null){
+                str+="cluster"+i+":"+C[i]+"\n";
+
+            }
+        }
+        return str;
+    }
+
+    String toString(Data data){
+        String str="";
+        for(int i=0;i<C.length;i++){
+            if (C[i]!=null){
+                str+="cluster"+i+":"+C[i].toString(data)+"\n";
 
             }
         }
@@ -31,59 +47,40 @@ class ClusterSet {
 
     }
 
-    /*
-     * Input: distance: oggetto per il calcolo della distanza tra cluster; data:
-     * oggetto istanza
-     * che rappresenta il dataset in cui si sta calcolando l’oggetto istanza di
-     * ClusterSet
-     * Output: nuova istanza di ClusterSet
-     * Comportamento: determina la coppia di cluster più simili (usando il metodo
-     * distance
-     * di ClusterDistance e li fonde in unico cluster; crea una nuova istanza di
-     * ClusterSet
-     * che contiene tutti i cluster dell’oggetto this a meno dei due cluster fusi al
-     * posto dei
-     * quali inserisce il cluster risultante dalla fusione (nota bene l’oggetto
-     * ClusterSet
-     * risultante memorizza un numero di cluster che è pari al numero di cluster
-     * memorizzato nell’oggetto this meno 1).
-     */
-    public ClusterSet mergeClosestClusters(ClusterDistance distance, Data data) {
-        ClusterSet newCSet = new ClusterSet(this.C.length - 1);
-
-        double currMin = Double.MAX_VALUE;
-        int c1 = 0, c2 = 0;
-        // ALl pairs
-        for (int i = 0; i < this.C.length - 1; i++) {
-            for (int j = i + 1; j < C.length; j++) {
-                double dis = distance.distance(C[i], C[j], data);
-                if (dis < currMin) {
-                    currMin = dis;
-                    c1 = i;
-                    c2 = j;
+    ClusterSet mergeClosestClusters(ClusterDistance distance, Data data){
+        double min_dist = Double.MAX_VALUE;
+        double dist = 0;
+        int c1 = 0;
+        int c2 = 0;
+        Cluster newC = new Cluster();
+        Cluster [] array = new Cluster[2];
+        ClusterSet NewSet = new ClusterSet(C.length-1);
+        for(int i=0;i<C.length-1;i++){
+            for (int j=i+1;j<C.length;j++){
+                dist = distance.distance(C[i],C[j],data);
+                if (dist<min_dist){
+                    min_dist=dist;
+                    array[0]=C[i];
+                    array[1]=C[j];
+                    c1=i;
+                    c2=j;
                 }
             }
         }
-        // add all other clusters
-        for (int i = 0; i < C.length; i++) {
-            if (i == c1 || i == c2)
-                continue;
-            newCSet.add(C[i]);
-        }
-        newCSet.add(C[c1].mergeCluster(C[c2]));
-        return newCSet;
-    }
-
-    String toString(Data data) {
-        String str = "";
-        for (int i = 0; i < C.length; i++) {
-            if (C[i] != null) {
-                str += "cluster" + i + ":" + C[i].toString(data) + "\n";
-
+        for(int i=0;i<C.length;i++){
+            if (c1!=i && c2!=i){
+                NewSet.add(this.get(i));
             }
         }
-        return str;
 
+        /*for(int i=0;i<array[0].getSize();i++){
+            newC.addData(array[0].getElement(i));
+        }
+        for(int i=0;i<array[1].getSize();i++){
+            newC.addData(array[1].getElement(i));
+        }*/
+        newC = C[c1].mergeCluster(C[c2]);
+        NewSet.add(newC);
+        return NewSet;
     }
-
 }

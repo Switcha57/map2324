@@ -1,34 +1,33 @@
 public class Dendrogram {
-    private ClusterSet[] tree;
+    private ClusterSet [] tree;
 
-    public Dendrogram(int depth) {
-        this.tree = new ClusterSet[depth];
+    public Dendrogram(int length){
+        tree = new ClusterSet[length];
     }
 
-    public void setClusterSet(int index, ClusterSet v) {
-        this.tree[index] = v;
+    void setClusterSet(ClusterSet c, int level){
+        tree[level] = c;
     }
 
-    public ClusterSet getClusterSet(int level) {
-        return this.tree[level];
+    ClusterSet getClusterSet(int level){
+        return tree[level];
     }
 
-    public int getDepth() {
-        return this.tree.length;
+    int getDepth(){
+        return tree.length;
     }
 
     public String toString() {
-        String v = "";
-        for (int i = 0; i < tree.length; i++)
-            v += ("level" + i + ":\n" + tree[i] + "\n");
+        String v="";
+        for (int i=0;i<tree.length;i++)
+            v+=("level"+i+":\n"+tree[i]+"\n");
         return v;
     }
 
-    public String toString(Data data) {
-        String v = "";
-        for (int i = 0; i < tree.length; i++)
-            v += ("level" + i + ":\n" + tree[i].toString(data) + "\n");
+    String toString(Data data) {
+        String v="";
+        for (int i=0;i<tree.length;i++)
+            v+=("level"+i+":\n"+tree[i].toString(data)+"\n");
         return v;
     }
-
 }

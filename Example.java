@@ -1,55 +1,46 @@
-// default package
-import java.lang.Math;
+import java.lang.reflect.Array;
 import java.util.Arrays;
 
-public class Example {
+import static java.lang.Math.pow;
 
+public class Example {
+    private int length=0;
     private Double [] example;
 
-    /**
-     * @param length dimensione dell'esempio
-     * 
-     * inizializza il vettore example come vettore di dimensione length
-     */
-    public Example(int length) {
+    public Example(int length){
+        this.length = length;
         example = new Double[length];
     }
-
-    public Double[] getExample() {
-        return example;
+    public Example(){
+        example = new Double[length];
+    }
+    public double getExample(int index){
+        return example[index];
+    }
+    public int getLength(){
+        return length;
+    }
+    public void setExample(int index , double v){
+        example[index] = v;
+    }
+    public void setLength(int length){
+        this.length = length;
     }
 
-    public void setExample(Double[] example) {
-        this.example = example;
-    }
+    public double distance(Example newE) throws Exception {
+        int d=0;
+        if(this.length == newE.getLength()){
+            for(int i=0; i<length; i++){
+                d+= pow(this.example[i]-newE.getExample(i),2);
+            }
 
-    public void set(int index,Double v){
-        this.example[index] =v;
-    }
-
-    public Double get(int index){
-        return this.example[index];
-    }
-    /*
-     *  Input: newE : istanza di Example
-        Output: calcola la distanza euclidea tra this.example e new.example
-        Comportamento: restituisce il valore calcolato;
-
-     */
-    public Double distance(Example newE){
-        
-        Double dist =0.0;
-        for (int i = 0; i < this.example.length; i++) {
-            dist += Math.pow(this.example[i]-newE.example[i],2);
-            
+        }else{
+            throw new Exception("Dimensione dell'array diversa");
         }
-        return dist;
+        return d;
     }
 
-    @Override
-    public String toString() {
+    public String toString(){
         return Arrays.toString(example);
     }
-        
-
 }

@@ -1,105 +1,86 @@
+import java.util.Arrays;
 
 public class Data {
+    Example [] data;
+    int numberOfExamples=0;
 
-    public static void main(String args[]) {
-        Data trainingSet = new Data();
-        System.out.println(trainingSet);
-        Double[][] distancematrix = trainingSet.distance();
-        System.out.println("Distance matrix:\n");
-        for (int i = 0; i < distancematrix.length; i++) {
-            for (int j = 0; j < distancematrix.length; j++)
-                System.out.print(distancematrix[i][j] + "\t");
-            System.out.println("");
-        }
-
-    }
-
-    private Example[] data;
-
-    private int numberOfExamples;
-
-    Data() {
-
-        // data
-
-        data = new Example[5];
+    public Data(){
+        data=new Example[5];
         Example e = new Example(3);
-        e.set(0, 1.0);
-        e.set(1, 2.0);
-        e.set(2, 0.0);
-        data[0] = e;
+        e.setExample(0,1.0);
+        e.setExample(1,2.0);
+        e.setExample(2,0.0);
+        data[0]=e;
 
         e = new Example(3);
-        e.set(0, 0.0);
-        e.set(1, 1.0);
-        e.set(2, -1.0);
-        data[1] = e;
+        e.setExample(0,0.0);
+        e.setExample(1,1.0);
+        e.setExample(2,-1.0);
+        data[1]=e;
 
         e = new Example(3);
-        e.set(0, 1.0);
-        e.set(1, 3.0);
-        e.set(2, 5.0);
-        data[2] = e;
+        e.setExample(0,1.0);
+        e.setExample(1,3.0);
+        e.setExample(2,5.0);
+        data[2]=e;
 
         e = new Example(3);
-        e.set(0, 1.0);
-        e.set(1, 3.0);
-        e.set(2, 4.0);
-        data[3] = e;
+        e.setExample(0,1.0);
+        e.setExample(1,3.0);
+        e.setExample(2,4.0);
+        data[3]=e;
 
         e = new Example(3);
-        e.set(0, 2.0);
-        e.set(1, 2.0);
-        e.set(2, 0.0);
-        data[4] = e;
+        e.setExample(0,2.0);
+        e.setExample(1,2.0);
+        e.setExample(2,0.0);
+        data[4]=e;
 
-        // numberOfExamples
-        numberOfExamples = 5;
-
+        numberOfExamples=5;
     }
 
-    public Example[] getData() {
-        return data;
-    }
-
-    public int getNumberOfExamples() {
+    public int getNumberOfExamples(){
         return numberOfExamples;
     }
 
-    /*
-     * Input: indice di un esempio memorizzato in data
-     * Output: l’esempio memorizzato in data[exampleIndex]
-     * Comportamento: restituisce data[exampleIndex]
-     */
-    public Example getExample(int index) {
-        return data[index];
+    public Example getExample(int exampleIndex){
+        return data[exampleIndex];
     }
 
-    /*
-     * Input: //
-     * Output: matrice triangolare superiore delle distanze Euclidee calcolate tra
-     * gli
-     * esempi memorizzati in data. Tale matrice va avvalorata usando il metodo
-     * distance di
-     * Example
-     * Comportamento: restituisce la matrice triangolare superiore delle distanze
-     */
-    public Double[][] distance() {
-        Double[][] distancematrix = new Double[numberOfExamples][numberOfExamples];
-        for (int i = 0; i < numberOfExamples; i++) {
-            for (int j = i; j < numberOfExamples; j++) {
-                distancematrix[i][j] = data[i].distance(data[j]);
+    public double [][] distance() throws Exception {
+        double [][] dis = new double[numberOfExamples][numberOfExamples];
+        for(int i=0;i<numberOfExamples;i++){
+            for(int j=i;j<numberOfExamples;j++){
+                dis[i][j]=data[i].distance(data[j]);
             }
+
         }
-        return distancematrix;
+        return dis;
     }
 
-    public String toString() {
-        String outp = "";
-        for (int i = 0; i < numberOfExamples; i++) {
-            outp += "%d: %s\n".formatted(i, data[i]);
+    public String toString(){
+        StringBuilder s= new StringBuilder();
+        for(int i=0;i<numberOfExamples;i++){
+            s.append(Integer.toString(i)).append(":").append("[");
+            for(int j=0;j<data[0].getLength();j++){
+                s.append(Double.toString(data[i].getExample(j)));
+                if (j<data[0].getLength()-1){
+                    s.append(",");
+                }
+            }
+            s.append("]").append("\n");
         }
-        return outp;
+        return s.toString();
     }
-
+    public static void main(String [] args) throws Exception {
+        Data trainingSet=new Data();
+        System.out.println(trainingSet);
+        double [][] distancematrix = trainingSet.distance();
+        System.out.println("Distance matrix:\n");
+        for(int i=0;i<distancematrix.length;i++) {
+            for(int j=0;j<distancematrix.length;j++)
+                System.out.print(distancematrix[i][j]+"\t");
+            System.out.println("");
+        }
+    }
 }
