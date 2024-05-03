@@ -67,8 +67,17 @@ class ClusterSet {
                 }
             }
         }
-        for(int i=0;i<C.length;i++){
-            if (c1!=i && c2!=i){
+
+        for(int i=0;i<c1;i++){
+
+            NewSet.add(this.get(i));
+
+        }
+        newC = C[c1].mergeCluster(C[c2]);
+        NewSet.add(newC);
+
+        for(int i=c1+1;i<C.length;i++){
+            if (c2!=i){
                 NewSet.add(this.get(i));
             }
         }
@@ -79,8 +88,6 @@ class ClusterSet {
         for(int i=0;i<array[1].getSize();i++){
             newC.addData(array[1].getElement(i));
         }*/
-        newC = C[c1].mergeCluster(C[c2]);
-        NewSet.add(newC);
         return NewSet;
     }
 }
