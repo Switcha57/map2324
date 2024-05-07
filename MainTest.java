@@ -1,4 +1,6 @@
-
+import data.*;
+import clustering.*;
+import distance.*;
 public class MainTest {
 
     /**
@@ -8,7 +10,8 @@ public class MainTest {
 
         Data data =new Data();
         System.out.println(data);
-        int k=5;
+        System.out.print("Inserire la profondità del dendrogramma: ");
+        int k = Keyboard.readInt(); //5
         HierachicalClusterMiner clustering=new HierachicalClusterMiner(k);
 
         System.out.println("Single link distance");
