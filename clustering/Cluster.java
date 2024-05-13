@@ -4,8 +4,6 @@ public class Cluster {
 
     private Integer[] clusteredData =new Integer[0];
 
-
-
     //add the index of a sample to the cluster
     void addData(int id){
         // controllo duplicati
@@ -23,8 +21,12 @@ public class Cluster {
         return clusteredData.length;
     }
 
-    public int getElement(int i) {
-        return clusteredData[i];
+    public int getElement(int i) throws ArrayIndexOutOfBoundsException{
+        if(i<0 ||i>clusteredData.length-1){
+            throw new ArrayIndexOutOfBoundsException("indice deve essere compreso tra 0 e"+ (clusteredData.length-1));
+        }else{
+            return clusteredData[i];
+        }
     }
 
     // crea una copia del cluster corrente

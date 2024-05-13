@@ -6,24 +6,43 @@ public class Example {
     private int length=0;
     private Double [] example;
 
-    Example(int length){
-        this.length = length;
-        example = new Double[length];
+    Example(int length)throws IllegalArgumentException{
+        if(length<0){
+            throw new IllegalArgumentException("Lunghezza deve essere maggiore di zero");
+        }else{
+            this.length = length;
+            example = new Double[length];
+        }
     }
     Example(){
         example = new Double[length];
     }
-    double getExample(int index){
-        return example[index];
+    double getExample(int index) throws ArrayIndexOutOfBoundsException{
+        if(index<0 || index>length-1){
+            throw new ArrayIndexOutOfBoundsException("Indice deve essere compreso tra 0 e " + (length-1));
+        }else{
+            return example[index];
+        }
+
     }
     int getLength(){
         return length;
     }
-    void setExample(int index , double v){
-        example[index] = v;
+    void setExample(int index , double v) throws ArrayIndexOutOfBoundsException{
+        if(index<0 || index>length-1){
+            throw new ArrayIndexOutOfBoundsException("Indice deve essere compreso tra 0 e " + (length-1));
+        }else{
+            example[index] = v;
+        }
+
     }
-    void setLength(int length){
-        this.length = length;
+    void setLength(int length) throws IllegalArgumentException {
+        if(length<0){
+            throw new IllegalArgumentException("Lunghezza deve essere maggiore di zero");
+        }else{
+            this.length = length;
+        }
+
     }
 
     public double distance(Example newE) throws InvalidSizeException {

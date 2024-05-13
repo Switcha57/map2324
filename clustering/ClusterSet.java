@@ -6,11 +6,11 @@ class ClusterSet {
     private Cluster[] C;
     private int lastClusterIndex=0;
 
-    ClusterSet(int k) throws InvalidDepthException{
-        if(k<5){
-            C=new Cluster[k];
+    ClusterSet(int k){
+        if(k<0){
+            throw new IllegalArgumentException("la grandezza deve essere maggiore di 0");
         }else{
-            throw new InvalidDepthException("la profondità dell'albero è superiore al numero di esempi del dataset (5)");
+            C=new Cluster[k];
         }
     }
 
@@ -23,7 +23,11 @@ class ClusterSet {
     }
 
     Cluster get(int i){
-        return C[i];
+        if (i<0 || i>C.length-1){
+            throw new ArrayIndexOutOfBoundsException("Indice deve essere compreso tra 0 e " + (C.length-1));
+        }else{
+            return C[i];
+        }
     }
 
     int getLastClusterIndex(){

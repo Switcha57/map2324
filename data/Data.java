@@ -2,7 +2,7 @@ package data;
 
 public class Data {
     Example [] data;
-    int numberOfExamples=0;
+    static int numberOfExamples=0;
 
     public Data(){
         data=new Example[5];
@@ -39,15 +39,19 @@ public class Data {
         numberOfExamples=5;
     }
 
-    public int getNumberOfExamples(){
+    static public int getNumberOfExamples(){
         return numberOfExamples;
     }
 
-    public Example getExample(int exampleIndex){
-        return data[exampleIndex];
+    public Example getExample(int exampleIndex)throws ArrayIndexOutOfBoundsException{
+        if(exampleIndex<0 || exampleIndex>numberOfExamples-1){
+            throw new ArrayIndexOutOfBoundsException("indice deve essere compreso tra 0 e"+ (numberOfExamples-1));
+        }else{
+            return data[exampleIndex];
+        }
     }
 
-    public double [][] distance() throws Exception {
+    public double [][] distance() throws InvalidSizeException {
         double [][] dis = new double[numberOfExamples][numberOfExamples];
         for(int i=0;i<numberOfExamples;i++){
             for(int j=i;j<numberOfExamples;j++){

@@ -5,7 +5,7 @@ public class HierachicalClusterMiner {
 
     private Dendrogram dendrogram;
 
-    public HierachicalClusterMiner(int depth) {
+    public HierachicalClusterMiner(int depth) throws InvalidDepthException {
         dendrogram= new Dendrogram(depth);
     }
 
@@ -18,8 +18,8 @@ public class HierachicalClusterMiner {
     }
 
     public void mine(Data data, ClusterDistance distance) throws Exception {
-        ClusterSet newSet = new ClusterSet(data.getNumberOfExamples());
-        for(int i=0; i<data.getNumberOfExamples(); i++){
+        ClusterSet newSet = new ClusterSet(Data.getNumberOfExamples());
+        for(int i=0; i<Data.getNumberOfExamples(); i++){
             Cluster newE = new Cluster();
             newE.addData(i);
             newSet.add(newE);
