@@ -14,12 +14,7 @@ public class Example implements Iterable<Double>{
     }
 
     double getExample(int index) throws ArrayIndexOutOfBoundsException{
-        if(index<0 || index>example.size()-1){
-            throw new ArrayIndexOutOfBoundsException("Indice deve essere compreso tra 0 e " + (example.size()-1));
-        }else{
             return example.get(index);
-        }
-
     }
     void addExample(double v) {
         example.add(v);
