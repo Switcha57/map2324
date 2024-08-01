@@ -38,10 +38,11 @@ public class MainTest {
                 invalidInput=false;
             }
             }while(invalidInput);
+        ClusterDistance distance=null;
         switch(choice) {
             case 1:
                 System.out.println("Single link distance");
-                ClusterDistance distance=new SingleLinkDistance();
+                distance=new SingleLinkDistance();
 
                 double [][] distancematrix=data.distance();
                 System.out.println("Distance matrix:\n");
