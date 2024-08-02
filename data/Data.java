@@ -1,44 +1,50 @@
 package data;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Data {
-    Example [] data;
+    private List<Example>  data= new ArrayList<>();
     static int numberOfExamples=0;
 
     public Data(){
-        data=new Example[5];
-        Example e = new Example(3);
-        e.setExample(0,1.0);
-        e.setExample(1,2.0);
-        e.setExample(2,0.0);
-        data[0]=e;
+        Example e = new Example();
+        e.addExample(1.0);
+        e.addExample(2.0);
+        e.addExample(0.0);
+        data.add(e);
 
-        e = new Example(3);
-        e.setExample(0,0.0);
-        e.setExample(1,1.0);
-        e.setExample(2,-1.0);
-        data[1]=e;
+        e = new Example();
+        e.addExample(0.0);
+        e.addExample(1.0);
+        e.addExample(-1.0);
+        data.add(e);
 
-        e = new Example(3);
-        e.setExample(0,1.0);
-        e.setExample(1,3.0);
-        e.setExample(2,5.0);
-        data[2]=e;
+        e = new Example();
+        e.addExample(1.0);
+        e.addExample(3.0);
+        e.addExample(5.0);
+        data.add(e);
 
-        e = new Example(3);
-        e.setExample(0,1.0);
-        e.setExample(1,3.0);
-        e.setExample(2,4.0);
-        data[3]=e;
+        e = new Example();
+        e.addExample(1.0);
+        e.addExample(3.0);
+        e.addExample(4.0);
+        data.add(e);
 
-        e = new Example(3);
-        e.setExample(0,2.0);
-        e.setExample(1,2.0);
-        e.setExample(2,0.0);
-        data[4]=e;
+        e = new Example();
+        e.addExample(2.0);
+        e.addExample(2.0);
+        e.addExample(0.0);
+        data.add(e);
 
         numberOfExamples=5;
     }
 
+    /**
+     * Getter numero di esempi
+     * @return numero di esempi
+     */
     static public int getNumberOfExamples(){
         return numberOfExamples;
     }
