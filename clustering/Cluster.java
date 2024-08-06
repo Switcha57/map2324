@@ -1,73 +1,95 @@
 package clustering;
 import data.*;
-public class Cluster {
 
-    private Integer[] clusteredData =new Integer[0];
+import java.util.Iterator;
+import java.util.Set;
+import java.util.TreeSet;
 
-    //add the index of a sample to the cluster
+public class Cluster implements Iterable<Integer>, Cloneable {
+
+    private Set<Integer> clusteredData = new TreeSet<>();
+    //private Integer[] clusteredData =new Integer[0];
+
+    /**
+     * Aggiunge un indice di un Example al cluster.
+     * @param id indice dell'Example da aggiungere al cluster.
+     */
     void addData(int id){
-        // controllo duplicati
-        for(int i=0; i<clusteredData.length;i++)
-            if(id==clusteredData[i])
-                return;
-        Integer clusteredDataTemp[]=new Integer[clusteredData.length+1];
-        System.arraycopy(clusteredData, 0, clusteredDataTemp, 0, clusteredData.length);
-        clusteredData=clusteredDataTemp;
-        clusteredData[clusteredData.length-1]=id;
+        clusteredData.add(id);
     }
 
-
-    public int getSize() {
-        return clusteredData.length;
+    /**
+     * Ritorna la dimensione di clusteredData.
+     * @return la dimensione di clusteredData.
+     */
+    public int getSize() {return clusteredData.size();
     }
 
-    public int getElement(int i) throws ArrayIndexOutOfBoundsException{
-        if(i<0 ||i>clusteredData.length-1){
-            throw new ArrayIndexOutOfBoundsException("indice deve essere compreso tra 0 e"+ (clusteredData.length-1));
-        }else{
-            return clusteredData[i];
+    /**
+     * Override del metodo clone per clonare un cluster
+     * @return il cluster clonato
+     */
+    @Override
+    public Object clone() {
+        Cluster clone = new Cluster();
+        Iterator<Integer> iterator = clusteredData.iterator();
+        while(iterator.hasNext()){
+            clone.addData(iterator.next());
         }
+        return clone;
     }
 
-    // crea una copia del cluster corrente
-    Cluster createACopy() {
-        Cluster copyC=new Cluster();
-        for (int i=0;i<getSize();i++)
-            copyC.addData(clusteredData[i]);
-        return copyC;
-    }
-
-    // crea un nuovo cluster che è la fusione dei due cluster pre-esistenti
-    Cluster mergeCluster (Cluster c)
-    {
-        Cluster newC=new Cluster();
-        for (int i=0;i<getSize();i++)
-            newC.addData(clusteredData[i]);
-        for (int i=0;i<c.getSize();i++)
-            newC.addData(c.clusteredData[i]);
+    /**
+     * Crea un nuovo cluster che è la fusione dei due cluster precedenti.
+     * @param c il cluster da fondere.
+     * @return il cluster che rappresenta la fusione dei cluster precedenti.
+     */
+    Cluster mergeCluster (Cluster c) {
+        Cluster newC = (Cluster) this.clone();
+        Iterator<Integer> it = c.iterator();
+        while(it.hasNext()){
+            newC.addData(it.next());
+        }
         return newC;
 
     }
 
-
+    /**
+     * Rappresentazione in stringa della classe.
+     * @return la rappresentazione in stringa.
+     */
     public String toString() {
-        StringBuilder str= new StringBuilder();
-        for (int i=0;i<clusteredData.length-1;i++)
-            str.append(clusteredData[i]).append(",");
-        str.append(clusteredData[clusteredData.length - 1]);
+        StringBuilder str = new StringBuilder();
+        Iterator<Integer> it = clusteredData.iterator();
+        while(it.hasNext()){
+            str.append(it.next());
+            if (it.hasNext()) {
+                str.append(",");
+            }
+        }
         return str.toString();
     }
 
+    /**
+     * Rappresentazione in stringa della classe.
+     * @param data valori associati agli indici del cluster.
+     * @return la rappresentazione in stringa.
+     */
     String toString(Data data){
-        StringBuilder str= new StringBuilder();
-
-        for(int i=0;i<clusteredData.length;i++)
-            str.append("<").append(data.getExample(clusteredData[i])).append(">");
-
+        StringBuilder str = new StringBuilder();
+        Iterator<Integer> it = clusteredData.iterator();
+        while(it.hasNext()){
+            str.append("<").append(data.getExample(it.next())).append(">");
+        }
         return str.toString();
-
     }
 
-
-
+    /**
+     * Override del metodo iterator.
+     * @return l'iteratore a clusteredData.
+     */
+    @Override
+    public Iterator<Integer> iterator() {
+        return clusteredData.iterator();
+    }
 }

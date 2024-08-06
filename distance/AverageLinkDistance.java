@@ -1,21 +1,32 @@
 package distance;
 import data.*;
 import clustering.*;
-public class AverageLinkDistance implements ClusterDistance{
 
-    public  double distance(Cluster c1, Cluster c2, Data d) {
-        int dist=0;
-        int avgdist=0;
-        for(int i=0;i<c1.getSize();i++){
-            Example e1 = d.getExample(c1.getElement(i));
-            for(int j=0;j<c2.getSize();j++){
+import java.util.Iterator;
+
+public class AverageLinkDistance implements ClusterDistance{
+    /**
+     * Distanza tra cluster calcolata in average-link
+     * @param c1 cluster 1
+     * @param c2 cluster 2
+     * @param d distanza tra i due cluster
+     * @return
+     */
+    public double distance(Cluster c1, Cluster c2, Data d) {
+        double dist = 0;
+        double avgdist = 0;
+        Iterator<Integer> it1 = c1.iterator();
+        while (it1.hasNext()) {
+            Example e1 = d.getExample(it1.next());
+            Iterator<Integer> it2 = c2.iterator();
+            while (it2.hasNext()) {
                 try {
-                    dist+=e1.distance(d.getExample(c2.getElement(j)));
+                    dist += e1.distance(d.getExample(it2.next()));
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
             }
-            avgdist = dist/(c1.getSize()*c2.getSize());
+            avgdist = dist / (c1.getSize() * c2.getSize());
         }
         return avgdist;
     }

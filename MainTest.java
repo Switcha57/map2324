@@ -30,7 +30,7 @@ public class MainTest {
 
         int choice = 0;
         do{
-            System.out.println("Che distanza vuoi:\n 1) Single Link Distance\n2) Average Link Distance");
+            System.out.println("Che distanza vuoi:\n1) Single Link Distance\n2) Average Link Distance");
             choice = Keyboard.readInt();
             if (choice != 1 && choice != 2){
                 invalidInput = true;
@@ -55,12 +55,14 @@ public class MainTest {
                 clustering.mine(data,distance);
                 System.out.println(clustering);
                 System.out.println(clustering.toString(data));
+                break;
             case 2:
                 System.out.println("Average link distance");
                 distance=new AverageLinkDistance();
                 clustering.mine(data,distance);
                 System.out.println(clustering);
                 System.out.println(clustering.toString(data));
+                break;
         }
 
 
