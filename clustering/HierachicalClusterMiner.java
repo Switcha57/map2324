@@ -1,7 +1,10 @@
 package clustering;
 import data.*;
 import distance.*;
-public class HierachicalClusterMiner {
+
+import java.io.*;
+
+public class HierachicalClusterMiner implements Serializable {
 
     private Dendrogram dendrogram;
 
@@ -13,7 +16,7 @@ public class HierachicalClusterMiner {
         return dendrogram.toString();
     }
 
-    public String toString(Data data) {
+    public String toString(Data data) throws InvalidDepthException {
         return dendrogram.toString(data);
     }
 
@@ -30,4 +33,20 @@ public class HierachicalClusterMiner {
             dendrogram.setClusterSet(dendrogram.getClusterSet(i).mergeClosestClusters(distance,data),i+1);
         }
     }
+
+    public static HierachicalClusterMiner loadHierachicalClusterMiner(String fileName)
+            throws FileNotFoundException, IOException,ClassNotFoundException {
+        ObjectInputStream in = new ObjectInputStream(new FileInputStream(fileName));
+        HierachicalClusterMiner h=(HierachicalClusterMiner) in.readObject();
+        in.close();
+        return h;
+    }
+
+    public void salva(String fileName)throws FileNotFoundException, IOException {
+        ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(fileName));
+        out.writeObject(this);
+        out.close();
+    }
+
+
 }

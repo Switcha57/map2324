@@ -40,8 +40,11 @@ public class Dendrogram {
         return v;
     }
 
-    String toString(Data data) {
+    String toString(Data data) throws InvalidDepthException {
         String v="";
+        if (tree.length > data.getNumberOfExamples()) {
+            throw new InvalidDepthException("la profondità dell'albero è superiore al numero di esempi del dataset "+Data.getNumberOfExamples());
+        }
         for (int i=0;i<tree.length;i++)
             v+=("level"+i+":\n"+tree[i].toString(data)+"\n");
         return v;

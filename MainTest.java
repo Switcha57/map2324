@@ -1,8 +1,11 @@
 import data.*;
 import clustering.*;
+import database.DbAccess;
+import database.TableData;
 import distance.*;
 
 import java.util.InputMismatchException;
+import java.util.List;
 
 public class MainTest {
 
@@ -11,7 +14,7 @@ public class MainTest {
      */
     public static void main(String[] args) throws Exception {
 
-        Data data =new Data();
+        Data data =new Data(Keyboard.readWord());
         System.out.println(data);
         HierachicalClusterMiner clustering=null;
         boolean invalidInput = false;

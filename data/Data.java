@@ -1,5 +1,11 @@
 package data;
 
+import database.DbAccess;
+import database.EmptySetException;
+import database.MissingNumberException;
+import database.TableData;
+
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -7,39 +13,12 @@ import java.util.List;
 public class Data {
     private List<Example> data = new ArrayList<>();
     private static int numberOfExamples=0;
-    public Data() {
-        Example e = new Example();
-        e.addExample(1.0);
-        e.addExample(2.0);
-        e.addExample(0.0);
-        data.add(e);
-
-        e = new Example();
-        e.addExample(0.0);
-        e.addExample(1.0);
-        e.addExample(-1.0);
-        data.add(e);
-
-        e = new Example();
-        e.addExample(1.0);
-        e.addExample(3.0);
-        e.addExample(5.0);
-        data.add(e);
-
-        e = new Example();
-        e.addExample(1.0);
-        e.addExample(3.0);
-        e.addExample(4.0);
-        data.add(e);
-
-        e = new Example();
-        e.addExample(2.0);
-        e.addExample(2.0);
-        e.addExample(0.0);
-        data.add(e);
-
-        numberOfExamples=data.size();
+    public Data(String tableName) throws NoDataException, SQLException, EmptySetException, MissingNumberException {
+        TableData td = new TableData(new DbAccess());
+        data = td.getDistinctTransazioni(tableName);
+        numberOfExamples = data.size();
     }
+
 
     /**
      * Getter numero di esempi
@@ -81,7 +60,7 @@ public class Data {
         return s.toString();
     }
 
-    public static void main(String[] args) throws Exception {
+    /*public static void main(String[] args) throws Exception {
         Data trainingSet = new Data();
         System.out.println(trainingSet);
         double[][] distancematrix = trainingSet.distance();
@@ -91,5 +70,5 @@ public class Data {
                 System.out.print(distancematrix[i][j] + "\t");
             System.out.println("");
         }
-    }
+    }*/
 }
