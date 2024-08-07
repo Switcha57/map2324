@@ -17,7 +17,7 @@ public class TableData {
 
     public List<Example> getDistinctTransazioni(String table) throws SQLException,
             EmptySetException,MissingNumberException {
-        List<Example> distinctExamples = new ArrayList<Example>();
+        List<Example> distinctExamples = new ArrayList<>();
         try{
             Statement s = db.getConnection().createStatement();
 
@@ -38,18 +38,23 @@ public class TableData {
                 ResultSetMetaData rsmd = r.getMetaData();
                 int columnsNumber = rsmd.getColumnCount();
                 for (int i = 1; i <= columnsNumber; i++) {
+                    if (rsmd.getColumnType(i) != java.sql.Types.FLOAT) {
+                        throw new MissingNumberException("e' presente una colonna non float");
+                    }
+                }
+                for (int i = 1; i <= columnsNumber; i++) {
                     e.addExample(r.getDouble(i));
                 }
                 distinctExamples.add(e);
+            }
+            if(distinctExamples.size() == 0) {
+                throw new EmptySetException("La tabella è vuota");
             }
             r.close();
             s.close(); // Also closes ResultSet
 
         } catch (SQLException ex) {
-            // handle any errors
-            System.out.println("SQLException: " + ex.getMessage());
-            System.out.println("SQLState: " + ex.getSQLState());
-            System.out.println("VendorError: " + ex.getErrorCode());
+            throw new SQLException(ex.getMessage());
         } catch (DatabaseConnectionException e) {
             throw new RuntimeException(e);
         }
