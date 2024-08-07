@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ * Costruttore di data
+ */
 public class Data {
     private List<Example> data = new ArrayList<>();
     private static int numberOfExamples=0;
@@ -29,10 +32,22 @@ public class Data {
         return numberOfExamples;
     }
 
+    /**
+     * Getter di un example Sapendo l'indice
+     * @param exampleIndex indice di example contenuto in uno cluster
+     * @return example associato all'indice
+     * @throws ArrayIndexOutOfBoundsException elemento non esistente
+     */
     public Example getExample(int exampleIndex) throws ArrayIndexOutOfBoundsException {
         return data.get(exampleIndex);
     }
 
+    /**
+     * Restituisce la matrice triangolare superiore delle distanze
+     * @return matrice triangolare superiore delle distanze Euclidee calcolate tra gli
+     * esempi memorizzati in data.
+     * @throws InvalidSizeException data non congrui
+     */
     public double[][] distance() throws InvalidSizeException {
         double[][] dis = new double[numberOfExamples][numberOfExamples];
         for (int i = 0; i < numberOfExamples; i++) {
@@ -44,6 +59,10 @@ public class Data {
         return dis;
     }
 
+    /**
+     * Metodo toString
+     * @return rappresentazione in stringa di Data
+     */
     public String toString() {
         StringBuilder s = new StringBuilder();
         for (int i = 0; i < numberOfExamples; i++) {
