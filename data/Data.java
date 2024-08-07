@@ -14,12 +14,15 @@ import java.util.List;
  * Costruttore di data
  */
 public class Data {
-    private List<Example> data = new ArrayList<>();
+    private List<Example> data;
     private static int numberOfExamples=0;
     public Data(String tableName) throws NoDataException, SQLException, EmptySetException, MissingNumberException {
         TableData td = new TableData(new DbAccess());
         data = td.getDistinctTransazioni(tableName);
         numberOfExamples = data.size();
+        if (numberOfExamples==0) {
+            throw new NoDataException("Nessun valore trovato");
+        }
     }
 
 
