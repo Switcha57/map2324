@@ -39,7 +39,6 @@ public class ServerOneClient {
         ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
         boolean flag = true;
         while (flag) {
-            System.out.println("In attesa di una richiesta del client sulla porta " + port);
             String tablename = (String) in.readObject();
             if (existTable(db.getConnection(), tablename )) {
                 out.writeObject("OK");
