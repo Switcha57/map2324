@@ -32,24 +32,29 @@ public class ServerOneClient {
 
 
     public static void main(String[] args) throws Exception {
-        port = Integer.parseInt(args[0]);
+        //port = Integer.parseInt(args[0]);
+        port = 1234;
         server = new ServerSocket(port);
         Socket socket = server.accept();
-        ObjectInputStream in = new ObjectInputStream(new BufferedInputStream(socket.getInputStream()));
+        ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
         ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
         boolean flag = true;
         while (flag) {
+            int coso = (Integer) in.readObject(); //la prof ha mandato questo 0 al server, immagino serva per capire se è avvenuta effettivamente la connessione
             String tablename = (String) in.readObject();
-            if (existTable(db.getConnection(), tablename )) {
+            if (existTable(db.getConnection(), tablename ) && coso == 0) {
                 out.writeObject("OK");
                 data = new Data(tablename);
             }else {
                 out.writeObject("Errore tabella inesitente");
             }
+            System.out.println("Tabella accettata\n");
+            System.out.println("In attesa della scelta (file o database)");
             int scelta = (Integer) in.readObject();
-            String filename = (String) in.readObject();
+            System.out.println("Scelta: " + scelta);
             switch (scelta) {
                 case 1:
+                    String filename = (String) in.readObject();
                     if (existFile(filename)){
                         out.writeObject("OK");
                         clustering = HierachicalClusterMiner.loadHierachicalClusterMiner(filename);
@@ -61,11 +66,12 @@ public class ServerOneClient {
                     break;
                 case 2:
                     int depth = (Integer) in.readObject();
+                    System.out.println("Profondità: " + depth);
                     clustering = new HierachicalClusterMiner(depth);
                     scelta = (Integer) in.readObject();
                     out.writeObject("OK"); // <- non ho capito il senso di questo "OK"
                     ob = ClusterDistance(scelta,data,clustering);
-                    out.writeObject(ob.getFirst()); //non ho capito che dendogramma vuole (la struttura oppure il dendogramma con i dati) quindi li ho fatti entrambi, nel caso si cancella
+                    out.writeObject(ob.getLast()); //non ho capito che dendogramma vuole (la struttura oppure il dendogramma con i dati) nel dubbio ho fatto quello completa
                     filename = (String) in.readObject();
                     clustering = (HierachicalClusterMiner) ob.getFirst();
                     clustering.salva(filename);
@@ -84,7 +90,7 @@ public class ServerOneClient {
     }
 
     private static boolean existFile (String filename) {
-        File f = new File("D:\\git-workspace\\MAP\\src\\" + filename); //percorso assoluto tanto per, dopo lo cambio
+        File f = new File("D:\\git-workspace\\MAP\\" + filename); //percorso assoluto tanto per, dopo lo cambio
         if (f.exists() && !f.isDirectory()) {
             return true;
         }
@@ -103,22 +109,21 @@ public class ServerOneClient {
                     for (int j = 0; j < distancematrix[i].length; j++) {
                         sb.append(distancematrix[i][j]).append("\t");
                     }
-                    sb.append("");
+                    sb.append("").append("\n");
                 }
-                ob.add(sb.toString());
+                sb.append("\n\n\n");
                 clustering.mine(data,distance);
-                String clustering1 = clustering.toString();
-                String clustering2 = clustering.toString(data);
-                ob.add(clustering1); //<- da cancellare nel caso
-                ob.add(clustering2); //<- da cancellare nel caso
+                String clustering1 = clustering.toString(data);
+                sb.append(clustering1);
+                ob.add(clustering);
+                ob.add(sb.toString());
                 break;
             case 2:
                 distance = new AverageLinkDistance();
                 clustering.mine(data, distance);
-                clustering1 = clustering.toString();
-                clustering2 = clustering.toString(data);
-                ob.add(clustering1); //<- da cancellare nel caso
-                ob.add(clustering2); //<- da cancellare nel caso
+                clustering1 = clustering.toString(data);
+                ob.add(clustering);
+                ob.add(clustering1);
                 break;
         }
         return ob;

@@ -90,8 +90,10 @@ public class MainTest {
             System.out.println(risposta); // stampo il messaggio di errore
     }
     public static void main(String[] args) {
-        String ip=args[0];
-        int port = Integer.parseInt(args[1]);
+        //String ip=args[0];
+        String ip="127.0.0.1";
+        //int port = Integer.parseInt(args[1]);
+        int port = 1234;
         MainTest main=null;
         try{
             main=new MainTest(ip,port);

@@ -1,7 +1,10 @@
 package clustering;
 import data.*;
 import distance.*;
-class ClusterSet {
+
+import java.io.Serializable;
+
+class ClusterSet implements Serializable {
 
     private Cluster[] C;
     private int lastClusterIndex=0;

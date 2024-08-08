@@ -1,11 +1,12 @@
 package clustering;
 import data.*;
 
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 
-public class Cluster implements Iterable<Integer>, Cloneable {
+public class Cluster implements Iterable<Integer>, Cloneable, Serializable {
 
     private Set<Integer> clusteredData = new TreeSet<>();
     //private Integer[] clusteredData =new Integer[0];
