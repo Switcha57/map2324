@@ -103,20 +103,10 @@ public class ServerOneClient {
         switch (scelta) {
             case 1:
                 distance = new SingleLinkDistance();
-                double [][] distancematrix=data.distance();
-                StringBuilder sb = new StringBuilder();
-                for (int i = 0; i < distancematrix.length; i++) {
-                    for (int j = 0; j < distancematrix[i].length; j++) {
-                        sb.append(distancematrix[i][j]).append("\t");
-                    }
-                    sb.append("").append("\n");
-                }
-                sb.append("\n\n\n");
                 clustering.mine(data,distance);
                 String clustering1 = clustering.toString(data);
-                sb.append(clustering1);
                 ob.add(clustering);
-                ob.add(sb.toString());
+                ob.add(clustering1);
                 break;
             case 2:
                 distance = new AverageLinkDistance();
