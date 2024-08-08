@@ -16,6 +16,7 @@ import java.util.List;
 public class Data {
     private List<Example> data = new ArrayList<>();
     private static int numberOfExamples=0;
+
     public Data(String tableName) throws NoDataException, SQLException, EmptySetException, MissingNumberException {
         TableData td = new TableData(new DbAccess());
         data = td.getDistinctTransazioni(tableName);

@@ -1,75 +1,116 @@
-import data.*;
-import clustering.*;
-import database.DbAccess;
-import database.TableData;
-import distance.*;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.InetAddress;
+import java.net.Socket;
 
-import java.util.InputMismatchException;
-import java.util.List;
 
 public class MainTest {
 
     /**
      * @param args
      */
-    public static void main(String[] args) throws Exception {
+    private ObjectOutputStream out;
+    private ObjectInputStream in ; // stream con richieste del client
 
-        Data data =new Data(Keyboard.readWord());
-        System.out.println(data);
-        HierachicalClusterMiner clustering=null;
-        boolean invalidInput = false;
-        do {
-            invalidInput= false;
-            System.out.print("Inserire la profondità del dendrogramma: ");
-            int k = Keyboard.readInt();//5
-            try{
-                clustering=new HierachicalClusterMiner(k);
-            }catch (InvalidDepthException e){
-                System.out.println(e);
-                invalidInput = true;
-            }
 
-        }while(invalidInput);
+    public MainTest(String ip, int port) throws IOException{
+        InetAddress addr = InetAddress.getByName(ip); //ip
+        System.out.println("addr = " + addr);
+        Socket socket = new Socket(addr, port); //Port
+        System.out.println(socket);
 
-        int choice = 0;
+        out = new ObjectOutputStream(socket.getOutputStream());
+        in = new ObjectInputStream(socket.getInputStream());	; // stream con richieste del client
+    }
+
+    private int menu(){
+        int answer;
+        System.out.println("Scegli una opzione");
         do{
-            System.out.println("Che distanza vuoi:\n1) Single Link Distance\n2) Average Link Distance");
-            choice = Keyboard.readInt();
-            if (choice != 1 && choice != 2){
-                invalidInput = true;
-            }else {
-                invalidInput=false;
-            }
-            }while(invalidInput);
-        ClusterDistance distance=null;
-        switch(choice) {
-            case 1:
-                System.out.println("Single link distance");
-                distance=new SingleLinkDistance();
-
-                double [][] distancematrix=data.distance();
-                System.out.println("Distance matrix:\n");
-                for(int i=0;i<distancematrix.length;i++) {
-                    for(int j=0;j<distancematrix.length;j++)
-                        System.out.print(distancematrix[i][j]+"\t");
-                    System.out.println("");
-                }
-
-                clustering.mine(data,distance);
-                System.out.println(clustering);
-                System.out.println(clustering.toString(data));
-                break;
-            case 2:
-                System.out.println("Average link distance");
-                distance=new AverageLinkDistance();
-                clustering.mine(data,distance);
-                System.out.println(clustering);
-                System.out.println(clustering.toString(data));
-                break;
+            System.out.println("(1) Carica Dendrogramma da File");
+            System.out.println("(2) Apprendi Dendrogramma da Database");
+            System.out.print("Risposta:");
+            answer=Keyboard.readInt();
         }
+        while(answer<=0 || answer>2);
+        return answer;
+
+    }
+    private void loadDataOnServer() throws IOException, ClassNotFoundException {
+        boolean flag=false;
+        do {
+            System.out.println("Nome tabella:");
+            String tableName=Keyboard.readString();
+            out.writeObject(0);
+            out.writeObject(tableName);
+            String risposta=(String)(in.readObject());
+            if(risposta.equals("OK"))
+                flag=true;
+            else System.out.println(risposta);
+
+        }while(flag==false);
+    }
+
+    private void loadDedrogramFromFileOnServer() throws IOException, ClassNotFoundException {
+        System.out.println("Inserire il nome dell'archivio (comprensivo di estensione):");
+        String fileName=Keyboard.readString();
+
+        out.writeObject(1);
+        out.writeObject(fileName);
+        String risposta= (String) (in.readObject());
+        if(risposta.equals("OK"))
+            System.out.println(in.readObject()); // stampo il dendrogramma che il server mi sta inviando
+        else
+            System.out.println(risposta); // stampo il messaggio di errore
+    }
+
+    private void mineDedrogramOnServer() throws IOException, ClassNotFoundException {
 
 
+        out.writeObject(2);
+        System.out.println("Introdurre la profondita'  del dendrogramma");
+        int depth=Keyboard.readInt();
+        out.writeObject(depth);
+        int dType=-1;
+        do {
+            System.out.println("Distanza: single-link (1), average-link (2):");
+            dType=Keyboard.readInt();
+        }while (dType<=0 || dType>2);
+        out.writeObject(dType);
 
+        String risposta= (String) (in.readObject());
+        if(risposta.equals("OK")) {
+            System.out.println(in.readObject()); // stampo il dendrogramma che il server mi sta inviando
+            System.out.println("Inserire il nome dell'archivio (comprensivo di estensione):");
+            String fileName=Keyboard.readString();
+            out.writeObject(fileName);
+        }
+        else
+            System.out.println(risposta); // stampo il messaggio di errore
+    }
+    public static void main(String[] args) {
+        String ip=args[0];
+        int port = Integer.parseInt(args[1]);
+        MainTest main=null;
+        try{
+            main=new MainTest(ip,port);
+
+            main.loadDataOnServer();
+            int scelta=main.menu();
+            if(scelta==1)
+                main.loadDedrogramFromFileOnServer();
+            else
+                main.mineDedrogramOnServer();
+
+
+        }
+        catch (IOException |ClassNotFoundException  e){
+            System.out.println(e);
+            return;
+        }
     }
 
 }
+
+
