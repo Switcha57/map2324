@@ -71,7 +71,7 @@ public class ServerOneClient {
                     scelta = (Integer) in.readObject();
                     out.writeObject("OK"); // <- non ho capito il senso di questo "OK"
                     ob = ClusterDistance(scelta,data,clustering);
-                    out.writeObject(ob.getLast()); //non ho capito che dendogramma vuole (la struttura oppure il dendogramma con i dati) nel dubbio ho fatto quello completa
+                    out.writeObject(ob.getLast());
                     filename = (String) in.readObject();
                     clustering = (HierachicalClusterMiner) ob.getFirst();
                     clustering.salva(filename);
