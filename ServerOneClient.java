@@ -90,7 +90,7 @@ public class ServerOneClient {
     }
 
     private static boolean existFile (String filename) {
-        File f = new File("D:\\git-workspace\\MAP\\" + filename); //percorso assoluto tanto per, dopo lo cambio
+        File f = new File(".\\res\\" + filename); //percorso assoluto tanto per, dopo lo cambio
         if (f.exists() && !f.isDirectory()) {
             return true;
         }
