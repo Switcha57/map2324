@@ -20,7 +20,7 @@ public class HierachicalClusterMiner implements Serializable {
         return dendrogram.toString(data);
     }
 
-    public void mine(Data data, ClusterDistance distance) throws Exception {
+    public void mine(Data data, ClusterDistance distance){
         ClusterSet newSet = new ClusterSet(Data.getNumberOfExamples());
         for(int i=0; i<Data.getNumberOfExamples(); i++){
             Cluster newE = new Cluster();

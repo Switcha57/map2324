@@ -22,67 +22,79 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class ServerOneClient {
-    private static ServerSocket server;
-    private static int port;
+public class ServerOneClient extends Thread{
+    private static Socket s;
     private static DbAccess db = new DbAccess();
     private static Data data;
     private static HierachicalClusterMiner clustering = null;
     private static ArrayList<Object> ob;
+    private static ObjectInputStream in;
+    private static ObjectOutputStream out;
 
 
-    public static void main(String[] args) throws Exception {
-        //port = Integer.parseInt(args[0]);
-        port = 1234;
-        server = new ServerSocket(port);
-        Socket socket = server.accept();
-        ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
-        ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-        boolean flag = true;
-        while (flag) {
-            int coso = (Integer) in.readObject(); //la prof ha mandato questo 0 al server, immagino serva per capire se è avvenuta effettivamente la connessione
-            String tablename = (String) in.readObject();
-            if (existTable(db.getConnection(), tablename ) && coso == 0) {
-                out.writeObject("OK");
-                data = new Data(tablename);
-            }else {
-                out.writeObject("Errore tabella inesitente");
-            }
-            System.out.println("Tabella accettata\n");
-            System.out.println("In attesa della scelta (file o database)");
-            int scelta = (Integer) in.readObject();
-            System.out.println("Scelta: " + scelta);
-            switch (scelta) {
-                case 1:
-                    String filename = (String) in.readObject();
-                    if (existFile(filename)){
-                        out.writeObject("OK");
-                        clustering = HierachicalClusterMiner.loadHierachicalClusterMiner(filename);
-                        out.writeObject(clustering);
-                    }else {
-                        out.writeObject("file inesistente");
-                    }
-                    flag = false;
-                    break;
-                case 2:
-                    int depth = (Integer) in.readObject();
-                    System.out.println("Profondità: " + depth);
-                    clustering = new HierachicalClusterMiner(depth);
-                    scelta = (Integer) in.readObject();
-                    out.writeObject("OK"); // <- non ho capito il senso di questo "OK"
-                    ob = ClusterDistance(scelta,data,clustering);
-                    out.writeObject(ob.getLast());
-                    filename = (String) in.readObject();
-                    clustering = (HierachicalClusterMiner) ob.getFirst();
-                    clustering.salva(filename);
-                    flag = false;
-                    break;
-            }
-        }
-        in.close();
-        out.close();
+    public ServerOneClient(Socket socket) throws Exception {
+        s = socket;
+        in = new ObjectInputStream(socket.getInputStream());
+        out = new ObjectOutputStream(socket.getOutputStream());
+        start();
     }
 
+    public void run() {
+        try {
+            boolean flag = true;
+            while (flag) {
+                int coso = (Integer) in.readObject(); //la prof ha mandato questo 0 al server, immagino serva per capire se è avvenuta effettivamente la connessione
+                String tablename = (String) in.readObject();
+                if (existTable(db.getConnection(), tablename ) && coso == 0) {
+                    out.writeObject("OK");
+                    data = new Data(tablename);
+                }else {
+                    out.writeObject("Errore tabella inesitente");
+                }
+                System.out.println("Tabella accettata\n");
+                System.out.println("In attesa della scelta (file o database)");
+                int scelta = (Integer) in.readObject();
+                System.out.println("Scelta: " + scelta);
+                switch (scelta) {
+                    case 1:
+                        String filename = (String) in.readObject();
+                        if (existFile(filename)){
+                            out.writeObject("OK");
+                            clustering = HierachicalClusterMiner.loadHierachicalClusterMiner(filename);
+                            out.writeObject(clustering);
+                        }else {
+                            out.writeObject("file inesistente");
+                        }
+                        flag = false;
+                        break;
+                    case 2:
+                        int depth = (Integer) in.readObject();
+                        System.out.println("Profondità: " + depth);
+                        clustering = new HierachicalClusterMiner(depth);
+                        scelta = (Integer) in.readObject();
+                        out.writeObject("OK"); // <- non ho capito il senso di questo "OK"
+                        ob = ClusterDistance(scelta,data,clustering);
+                        out.writeObject(ob.getLast());
+                        filename = (String) in.readObject();
+                        clustering = (HierachicalClusterMiner) ob.getFirst();
+                        clustering.salva(filename);
+                        flag = false;
+                        break;
+                }
+            }
+            in.close();
+            out.close();
+        }catch (IOException | ClassNotFoundException | DatabaseConnectionException | SQLException | NoDataException |
+                EmptySetException | MissingNumberException | InvalidDepthException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                s.close();
+            }catch (IOException e) {
+                System.out.println("Socket non chiuso");
+            }
+        }
+    }
     private static boolean existTable (Connection conn, String table) throws SQLException {
         DatabaseMetaData md = conn.getMetaData();
         ResultSet rs = md.getTables(null, null, table, new String[] {"TABLE"});
@@ -97,7 +109,7 @@ public class ServerOneClient {
         return false;
     }
 
-    private static ArrayList<Object> ClusterDistance(int scelta, Data data, HierachicalClusterMiner clustering) throws Exception {
+    private static ArrayList<Object> ClusterDistance(int scelta, Data data, HierachicalClusterMiner clustering) throws InvalidDepthException {
         ClusterDistance distance = null;
         ArrayList<Object> ob = new ArrayList<>();
         switch (scelta) {

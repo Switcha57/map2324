@@ -60,7 +60,7 @@ class ClusterSet implements Serializable {
 
     }
 
-    ClusterSet mergeClosestClusters(ClusterDistance distance, Data data) throws Exception {
+    ClusterSet mergeClosestClusters(ClusterDistance distance, Data data) {
         double min_dist = Double.MAX_VALUE;
         double dist = 0;
         int c1 = 0;
