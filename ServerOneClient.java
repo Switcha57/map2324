@@ -23,13 +23,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class ServerOneClient extends Thread{
-    private static Socket s;
-    private static DbAccess db = new DbAccess();
-    private static Data data;
-    private static HierachicalClusterMiner clustering = null;
-    private static ArrayList<Object> ob;
-    private static ObjectInputStream in;
-    private static ObjectOutputStream out;
+    private Socket s;
+    private DbAccess db = new DbAccess();
+    private Data data;
+    private HierachicalClusterMiner clustering = null;
+    private ArrayList<Object> ob;
+    private ObjectInputStream in;
+    private ObjectOutputStream out;
 
 
     public ServerOneClient(Socket socket) throws Exception {
@@ -62,6 +62,7 @@ public class ServerOneClient extends Thread{
                             out.writeObject("OK");
                             clustering = HierachicalClusterMiner.loadHierachicalClusterMiner(filename);
                             out.writeObject(clustering);
+                            db.closeConnection();
                         }else {
                             out.writeObject("file inesistente");
                         }
