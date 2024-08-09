@@ -48,10 +48,10 @@ public class ServerOneClient extends Thread{
                 if (existTable(db.getConnection(), tablename ) && coso == 0) {
                     out.writeObject("OK");
                     data = new Data(tablename);
+                    System.out.println("Tabella accettata\n");
                 }else {
                     out.writeObject("Errore tabella inesitente");
                 }
-                System.out.println("Tabella accettata\n");
                 System.out.println("In attesa della scelta (file o database)");
                 int scelta = (Integer) in.readObject();
                 System.out.println("Scelta: " + scelta);
@@ -69,11 +69,19 @@ public class ServerOneClient extends Thread{
                         flag = false;
                         break;
                     case 2:
-                        int depth = (Integer) in.readObject();
-                        System.out.println("Profondità: " + depth);
-                        clustering = new HierachicalClusterMiner(depth);
-                        scelta = (Integer) in.readObject();
-                        out.writeObject("OK"); // <- non ho capito il senso di questo "OK"
+                        String mess = "OK";
+                        do {
+                            int depth = (Integer) in.readObject();
+                            System.out.println("Profondità: " + depth);
+                            try {
+                                clustering = new HierachicalClusterMiner(depth);
+                            } catch (InvalidDepthException e) {
+                                mess = e.getMessage();
+                            }
+                            scelta = (Integer) in.readObject();
+                            out.writeObject(mess);
+                        }while (!mess.equals("OK"));
+
                         ob = ClusterDistance(scelta,data,clustering);
                         out.writeObject(ob.getLast());
                         filename = (String) in.readObject();
@@ -120,6 +128,7 @@ public class ServerOneClient extends Thread{
                 String clustering1 = clustering.toString(data);
                 ob.add(clustering);
                 ob.add(clustering1);
+
                 break;
             case 2:
                 distance = new AverageLinkDistance();
