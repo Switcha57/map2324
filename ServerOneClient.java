@@ -21,6 +21,7 @@ import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class ServerOneClient extends Thread{
     private Socket s;
@@ -54,14 +55,18 @@ public class ServerOneClient extends Thread{
                 }
                 System.out.println("In attesa della scelta (file o database)");
                 int scelta = (Integer) in.readObject();
+
                 System.out.println("Scelta: " + scelta);
                 switch (scelta) {
                     case 1:
+                        ArrayList<String> list = showFile();
+                        out.writeObject(list);
                         String filename = (String) in.readObject();
+                        System.out.println(filename);
                         if (existFile(filename)){
                             out.writeObject("OK");
                             clustering = HierachicalClusterMiner.loadHierachicalClusterMiner(filename);
-                            out.writeObject(clustering);
+                            out.writeObject(clustering.toString(data));
                             db.closeConnection();
                         }else {
                             out.writeObject("file inesistente");
@@ -116,6 +121,19 @@ public class ServerOneClient extends Thread{
             return true;
         }
         return false;
+    }
+
+    private static ArrayList<String> showFile (){
+        ArrayList<String> list = new ArrayList<>();
+        String dirpath = ".\\res\\";
+        File dir = new File(dirpath);
+        File[] files = dir.listFiles();
+        if (files != null) {
+            for (File file : files) {
+                list.add(file.getName());
+            }
+        }
+        return list;
     }
 
     private static ArrayList<Object> ClusterDistance(int scelta, Data data, HierachicalClusterMiner clustering) throws InvalidDepthException {
