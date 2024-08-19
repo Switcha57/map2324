@@ -43,15 +43,18 @@ public class ServerOneClient extends Thread{
     public void run() {
         try {
             boolean flag = true;
+            Connection c = db.getConnection();
             while (flag) {
                 int coso = (Integer) in.readObject(); //la prof ha mandato questo 0 al server, immagino serva per capire se è avvenuta effettivamente la connessione
                 String tablename = (String) in.readObject();
-                if (existTable(db.getConnection(), tablename ) && coso == 0) {
+                if (existTable(c, tablename ) && coso == 0) {
                     out.writeObject("OK");
                     data = new Data(tablename);
                     System.out.println("Tabella accettata\n");
                 }else {
                     out.writeObject("Errore tabella inesitente");
+                    System.out.println("Tabella non accettata\n");
+                    continue;
                 }
                 System.out.println("In attesa della scelta (file o database)");
                 int scelta = (Integer) in.readObject();
