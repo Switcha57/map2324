@@ -1,6 +1,9 @@
 package clustering;
 import data.*;
-public class Dendrogram {
+
+import java.io.Serializable;
+
+public class Dendrogram implements Serializable {
     private ClusterSet [] tree;
 
     Dendrogram(int length) throws InvalidDepthException{

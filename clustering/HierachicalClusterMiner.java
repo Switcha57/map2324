@@ -20,7 +20,7 @@ public class HierachicalClusterMiner implements Serializable {
         return dendrogram.toString(data);
     }
 
-    public void mine(Data data, ClusterDistance distance) throws Exception {
+    public void mine(Data data, ClusterDistance distance){
         ClusterSet newSet = new ClusterSet(Data.getNumberOfExamples());
         for(int i=0; i<Data.getNumberOfExamples(); i++){
             Cluster newE = new Cluster();
@@ -36,14 +36,16 @@ public class HierachicalClusterMiner implements Serializable {
 
     public static HierachicalClusterMiner loadHierachicalClusterMiner(String fileName)
             throws FileNotFoundException, IOException,ClassNotFoundException {
-        ObjectInputStream in = new ObjectInputStream(new FileInputStream(fileName));
+        ObjectInputStream in = new ObjectInputStream(new FileInputStream(".\\res\\" + fileName));
         HierachicalClusterMiner h=(HierachicalClusterMiner) in.readObject();
         in.close();
         return h;
     }
 
     public void salva(String fileName)throws FileNotFoundException, IOException {
-        ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(fileName));
+        File file = new File(".\\res\\" + fileName);
+        file.createNewFile();
+        ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(".\\res\\" + fileName,false));
         out.writeObject(this);
         out.close();
     }
