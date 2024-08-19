@@ -22,8 +22,8 @@ public class AverageLinkDistance implements ClusterDistance{
             while (it2.hasNext()) {
                 try {
                     dist += e1.distance(d.getExample(it2.next()));
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
+                } catch (InvalidSizeException e) {
+                    System.out.println(e);
                 }
             }
             avgdist = dist / (c1.getSize() * c2.getSize());
