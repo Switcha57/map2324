@@ -31,6 +31,7 @@ public class ServerOneClient extends Thread{
     private ArrayList<Object> ob;
     private ObjectInputStream in;
     private ObjectOutputStream out;
+    private String tempfile;
 
 
     public ServerOneClient(Socket socket) throws Exception {
@@ -57,8 +58,8 @@ public class ServerOneClient extends Thread{
                     continue;
                 }
                 System.out.println("In attesa della scelta (file o database)");
-                int scelta = (Integer) in.readObject();
 
+                int scelta = (Integer) in.readObject();
                 System.out.println("Scelta: " + scelta);
                 switch (scelta) {
                     case 1:
@@ -77,6 +78,14 @@ public class ServerOneClient extends Thread{
                         flag = false;
                         break;
                     case 2:
+                        do {
+                            tempfile = (String) in.readObject();
+                            if (existFile(tempfile)){
+                                out.writeObject("File gia presente");
+                            }else {
+                                out.writeObject("File non esiste");
+                            }
+                        }while (existFile(tempfile));
                         String mess = "OK";
                         do {
                             int depth = (Integer) in.readObject();
@@ -97,6 +106,7 @@ public class ServerOneClient extends Thread{
                         clustering.salva(filename);
                         flag = false;
                         break;
+
                 }
             }
             in.close();
