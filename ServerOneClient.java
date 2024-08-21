@@ -46,6 +46,8 @@ public class ServerOneClient extends Thread{
             boolean flag = true;
             Connection c = db.getConnection();
             while (flag) {
+                ArrayList<String> tb = getTables(c);
+                out.writeObject(tb);
                 int coso = (Integer) in.readObject(); //la prof ha mandato questo 0 al server, immagino serva per capire se è avvenuta effettivamente la connessione
                 String tablename = (String) in.readObject();
                 if (existTable(c, tablename ) && coso == 0) {
@@ -126,6 +128,15 @@ public class ServerOneClient extends Thread{
         DatabaseMetaData md = conn.getMetaData();
         ResultSet rs = md.getTables(null, null, table, new String[] {"TABLE"});
         return rs.next();
+    }
+    private static ArrayList<String> getTables (Connection conn) throws SQLException {
+        ArrayList<String> tables = new ArrayList<>();
+        DatabaseMetaData md = conn.getMetaData();
+        ResultSet rs = md.getTables(null, null, null, new String[] {"TABLE"});
+        while (rs.next()) {
+            tables.add(rs.getString(3));
+        }
+        return tables;
     }
 
     private static boolean existFile (String filename) {
