@@ -46,7 +46,7 @@ public class HierachicalClusterMiner implements Serializable {
         new File(".\\res\\" + dir).mkdirs();
         File file = new File(".\\res\\" + dir+"\\"+fileName);
         file.createNewFile();
-        ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(".\\res\\" + fileName,false));
+        ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(".\\res\\" + dir+"\\"+fileName,false));
         out.writeObject(this);
         out.close();
     }
