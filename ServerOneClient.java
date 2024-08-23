@@ -83,9 +83,9 @@ public class ServerOneClient extends Thread{
                 System.out.println("Scelta: " + scelta);
                 switch (scelta) {
                     case 1:
-                        ArrayList<String> list = showFile();
+                        ArrayList<String> list = showFile(tablename);
                         out.writeObject(list);
-                        String filename = (String) in.readObject();
+                        String filename = tablename+"\\"+(String) in.readObject();
                         System.out.println(filename);
                         if (existFile(filename)){
                             out.writeObject("OK");
@@ -99,7 +99,7 @@ public class ServerOneClient extends Thread{
                         break;
                     case 2:
                         do {
-                            tempfile = (String) in.readObject();
+                            tempfile = tablename+"\\"+(String) in.readObject();
                             if (existFile(tempfile)){
                                 out.writeObject("File gia presente");
                             }else {
@@ -121,9 +121,9 @@ public class ServerOneClient extends Thread{
 
                         ob = ClusterDistance(scelta,data,clustering);
                         out.writeObject(ob.getLast());
-                        filename = (String) in.readObject();
+                        filename =  (String) in.readObject();
                         clustering = (HierachicalClusterMiner) ob.getFirst();
-                        clustering.salva(filename);
+                        clustering.salva(tablename, filename);
                         flag = false;
                         break;
 
@@ -166,9 +166,9 @@ public class ServerOneClient extends Thread{
         return false;
     }
 
-    private static ArrayList<String> showFile (){
+    private static ArrayList<String> showFile (String Tablename){
         ArrayList<String> list = new ArrayList<>();
-        String dirpath = ".\\res\\";
+        String dirpath = ".\\res\\"+ Tablename+"\\";
         File dir = new File(dirpath);
         File[] files = dir.listFiles();
         if (files != null) {

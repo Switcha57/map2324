@@ -42,8 +42,9 @@ public class HierachicalClusterMiner implements Serializable {
         return h;
     }
 
-    public void salva(String fileName)throws FileNotFoundException, IOException {
-        File file = new File(".\\res\\" + fileName);
+    public void salva(String dir,String fileName)throws FileNotFoundException, IOException {
+        new File(".\\res\\" + dir).mkdirs();
+        File file = new File(".\\res\\" + dir+"\\"+fileName);
         file.createNewFile();
         ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(".\\res\\" + fileName,false));
         out.writeObject(this);
