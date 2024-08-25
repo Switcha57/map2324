@@ -16,10 +16,7 @@ import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,31 +40,52 @@ public class ServerOneClient extends Thread{
 
     public void run() {
         try {
+            int coso = -1;
+            String tablename = "";
             boolean flag = true;
             Connection c = db.getConnection();
             while (flag) {
-                ArrayList<String> tb = getTables(c);
-                out.writeObject(tb);
-                int coso = (Integer) in.readObject(); //la prof ha mandato questo 0 al server, immagino serva per capire se è avvenuta effettivamente la connessione
-                String tablename = (String) in.readObject();
-                if (existTable(c, tablename ) && coso == 0) {
-                    out.writeObject("OK");
-                    data = new Data(tablename);
-                    System.out.println("Tabella accettata\n");
-                }else {
-                    out.writeObject("Errore tabella inesitente");
-                    System.out.println("Tabella non accettata\n");
-                    continue;
+                int opzione = (Integer) in.readObject();
+                String msg;
+                if (opzione == 1) {
+                    System.out.println("opzione: "+opzione);
+                    msg = createTable(c);
+                    coso = (Integer) in.readObject();
+                    tablename = msg;
+                    if (coso == 0) {
+                        data = new Data(tablename);
+                        System.out.println("Tabella accettata\n");
+                    } else {
+                        out.writeObject("Errore tabella inesitente");
+                        System.out.println("Tabella non accettata\n");
+                        continue;
+                    }
+                    System.out.println("Coso: "+coso);
+                    System.out.println("tablename: "+tablename);
+                } else if (opzione == 2) {
+                    System.out.println(opzione);
+                    ArrayList<String> tb = getTables(c); //<- qua ci arrivo quando scelto importa
+                    out.writeObject(tb);
+                    coso = (Integer) in.readObject();
+                    tablename = (String) in.readObject();
+                    if (coso == 0) {
+                        out.writeObject("OK");
+                        data = new Data(tablename);
+                        System.out.println("Tabella accettata\n");
+                    }else {
+                        out.writeObject("Errore tabella inesitente");
+                        System.out.println("Tabella non accettata\n");
+                        continue;
+                    }
                 }
                 System.out.println("In attesa della scelta (file o database)");
-
                 int scelta = (Integer) in.readObject();
                 System.out.println("Scelta: " + scelta);
                 switch (scelta) {
                     case 1:
-                        ArrayList<String> list = showFile();
+                        ArrayList<String> list = showFile(tablename);
                         out.writeObject(list);
-                        String filename = (String) in.readObject();
+                        String filename = tablename+"\\"+(String) in.readObject();
                         System.out.println(filename);
                         if (existFile(filename)){
                             out.writeObject("OK");
@@ -81,7 +99,7 @@ public class ServerOneClient extends Thread{
                         break;
                     case 2:
                         do {
-                            tempfile = (String) in.readObject();
+                            tempfile = tablename+"\\"+(String) in.readObject();
                             if (existFile(tempfile)){
                                 out.writeObject("File gia presente");
                             }else {
@@ -103,9 +121,9 @@ public class ServerOneClient extends Thread{
 
                         ob = ClusterDistance(scelta,data,clustering);
                         out.writeObject(ob.getLast());
-                        filename = (String) in.readObject();
+                        filename =  (String) in.readObject();
                         clustering = (HierachicalClusterMiner) ob.getFirst();
-                        clustering.salva(filename);
+                        clustering.salva(tablename, filename);
                         flag = false;
                         break;
 
@@ -115,7 +133,8 @@ public class ServerOneClient extends Thread{
             out.close();
         }catch (IOException | ClassNotFoundException | DatabaseConnectionException | SQLException | NoDataException |
                 EmptySetException | MissingNumberException | InvalidDepthException e) {
-            e.printStackTrace();
+            System.out.println("Il client ha interrotto la connessione con l'errore:" + e);
+
         } finally {
             try {
                 s.close();
@@ -132,7 +151,7 @@ public class ServerOneClient extends Thread{
     private static ArrayList<String> getTables (Connection conn) throws SQLException {
         ArrayList<String> tables = new ArrayList<>();
         DatabaseMetaData md = conn.getMetaData();
-        ResultSet rs = md.getTables(null, null, null, new String[] {"TABLE"});
+        ResultSet rs = md.getTables("MapDb", null, null, new String[] {"TABLE"});
         while (rs.next()) {
             tables.add(rs.getString(3));
         }
@@ -147,9 +166,9 @@ public class ServerOneClient extends Thread{
         return false;
     }
 
-    private static ArrayList<String> showFile (){
+    private static ArrayList<String> showFile (String Tablename){
         ArrayList<String> list = new ArrayList<>();
-        String dirpath = ".\\res\\";
+        String dirpath = ".\\res\\"+ Tablename+"\\";
         File dir = new File(dirpath);
         File[] files = dir.listFiles();
         if (files != null) {
@@ -181,5 +200,20 @@ public class ServerOneClient extends Thread{
                 break;
         }
         return ob;
+    }
+
+    public String createTable(Connection conn) throws IOException, ClassNotFoundException, SQLException {
+        Statement stmt = conn.createStatement();
+        String tablename = (String) in.readObject();
+        String query1 = (String) in.readObject();
+        String query2 = (String) in.readObject();
+        try {
+            stmt.executeUpdate(query1);
+            stmt.executeUpdate(query2);
+            out.writeObject("OK");
+        } catch (SQLException e) {
+            out.writeObject(e);
+        }
+        return tablename;
     }
 }
