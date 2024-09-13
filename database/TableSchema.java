@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 
@@ -14,25 +13,57 @@ import java.util.List;
 
 public class TableSchema {
     private DbAccess db;
+
+    /**
+     * Inner Classe rappresentante l'oggetto colonna della tabella.
+     */
     public class Column{
         private String name;
         private String type;
+
+        /**
+         * Costruttore della classe Column.
+         * @param name nome della colonna.
+         * @param type tipo della colonna
+         */
         Column(String name,String type){
             this.name=name;
             this.type=type;
         }
+
+        /**
+         * Metodo getter che restituisce il nome della colonna.
+         * @return nome della colonna.
+         */
         public String getColumnName(){
             return name;
         }
+
+        /**
+         * Metodo che controlla se il tipo è numerico.
+         * @return true se numerico, false altrimenti.
+         */
         public boolean isNumber(){
             return type.equals("number");
         }
+
+        /**
+         * Metodo che restituisce il nome e il tipo della colonna.
+         * @return stringa indicante il nome e il tipo della colonna.
+         */
         public String toString(){
             return name+":"+type;
         }
     }
     List<Column> tableSchema=new ArrayList<Column>();
 
+    /**
+     * Costruttore della classe TableSchema.
+     * @param db parametro rappresentante l'accesso al db.
+     * @param tableName nome della tabella.
+     * @throws SQLException
+     * @throws DatabaseConnectionException
+     */
     public TableSchema(DbAccess db, String tableName) throws SQLException, DatabaseConnectionException{
         this.db=db;
         HashMap<String,String> mapSQL_JAVATypes=new HashMap<String, String>();
@@ -70,11 +101,19 @@ public class TableSchema {
 
     }
 
-
+    /**
+     * Metodo che restituisce il numero di attributi.
+     * @return numero di attributi.
+     */
     public int getNumberOfAttributes(){
         return tableSchema.size();
     }
 
+    /**
+     * Metodo che restituisce la colonna di una tabella.
+     * @param index indice della colonna.
+     * @return colonna della tabella.
+     */
     public Column getColumn(int index){
         return tableSchema.get(index);
     }

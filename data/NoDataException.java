@@ -4,7 +4,7 @@ package data;
  */
 public class NoDataException extends Exception {
     /**
-     * Costruttore della classe InvalidDepthException.
+     * Costruttore della classe NoDataException.
      * @param s messaggio da mostrare.
      */
     public NoDataException(String s) {
