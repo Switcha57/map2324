@@ -6,7 +6,7 @@ public class MultiThreadServer {
     static private int port;
 
     /**
-     * Metodo Main che inizilizza un ServerSocket e attende una connessione dal client;
+     * Metodo main che inizilizza un ServerSocket e attende una connessione dal client;
      * alla connesione procede con l'inizilizzazione di un oggetto ServerOneClient.
      * @param args porta di connessione.
      * @throws IOException
