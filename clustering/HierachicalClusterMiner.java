@@ -8,18 +8,34 @@ public class HierachicalClusterMiner implements Serializable {
 
     private Dendrogram dendrogram;
 
+    /**
+     * Costruttore della classe HierachicalClusterMiner.
+     * @param depth profondità del dendogramma.
+     * @throws InvalidDepthException
+     */
     public HierachicalClusterMiner(int depth) throws InvalidDepthException {
         dendrogram= new Dendrogram(depth);
     }
-
+    /**
+     * Metodo che richiama il metodo toString di Dendogram.
+     * @return stringa rappresentante il dendogramma nascondendo i dati.
+     */
     public String toString() {
         return dendrogram.toString();
     }
-
+    /**
+     * Metodo che richiama il metodo toString di Dendogram.
+     * @return stringa rappresentante il dendogramma mostrando i dati.
+     */
     public String toString(Data data) throws InvalidDepthException {
         return dendrogram.toString(data);
     }
 
+    /**
+     * Metodo che elabora le informazioni del dendogramma.
+     * @param data dati all'interno del dendogramma.
+     * @param distance distanza (Single-Link o Average-Link distance)sulla quale effettuare il merge dei ClusterSet.
+     */
     public void mine(Data data, ClusterDistance distance){
         ClusterSet newSet = new ClusterSet(Data.getNumberOfExamples());
         for(int i=0; i<Data.getNumberOfExamples(); i++){
@@ -34,6 +50,14 @@ public class HierachicalClusterMiner implements Serializable {
         }
     }
 
+    /**
+     * Metodo che recupera un oggetto HierachicalClusterMiner da file.
+     * @param fileName nome del file da cui recuperare l'oggetto.
+     * @return oggetto HierachicalClusterMiner.
+     * @throws FileNotFoundException
+     * @throws IOException
+     * @throws ClassNotFoundException
+     */
     public static HierachicalClusterMiner loadHierachicalClusterMiner(String fileName)
             throws FileNotFoundException, IOException,ClassNotFoundException {
         ObjectInputStream in = new ObjectInputStream(new FileInputStream(".\\res\\" + fileName));
@@ -42,6 +66,13 @@ public class HierachicalClusterMiner implements Serializable {
         return h;
     }
 
+    /**
+     * Metodo che salva un oggetto HierachicalClusterMiner su file.
+     * @param dir directory in cui salvare il file.
+     * @param fileName nome del file da cui salvare l'oggetto.
+     * @throws FileNotFoundException
+     * @throws IOException
+     */
     public void salva(String dir,String fileName)throws FileNotFoundException, IOException {
         new File(".\\res\\" + dir).mkdirs();
         File file = new File(".\\res\\" + dir+"\\"+fileName);

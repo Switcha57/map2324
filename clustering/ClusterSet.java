@@ -9,6 +9,10 @@ class ClusterSet implements Serializable {
     private Cluster[] C;
     private int lastClusterIndex=0;
 
+    /**
+     * Costruttore della classe ClusterSet.
+     * @param k grandezza del cluster.
+     */
     ClusterSet(int k){
         if(k<0){
             throw new IllegalArgumentException("la grandezza deve essere maggiore di 0");
@@ -17,6 +21,10 @@ class ClusterSet implements Serializable {
         }
     }
 
+    /**
+     * Metodo che aggiunge un cluster al CluserSet.
+     * @param c cluster da aggiungere.
+     */
     void add(Cluster c){
         for(int j=0;j<lastClusterIndex;j++)
             if(c==C[j]) // to avoid duplicates
@@ -25,6 +33,11 @@ class ClusterSet implements Serializable {
         lastClusterIndex++;
     }
 
+    /**
+     * Metodo che recupera il cluster in un determinato indice.
+     * @param i indice del cluster.
+     * @return cluster selezionato.
+     */
     Cluster get(int i){
         if (i<0 || i>C.length-1){
             throw new ArrayIndexOutOfBoundsException("Indice deve essere compreso tra 0 e " + (C.length-1));
@@ -33,10 +46,18 @@ class ClusterSet implements Serializable {
         }
     }
 
+    /**
+     * Metodo che ritorna l'indice dell'ultimo cluster.
+     * @return indice dell'ultimo cluster.
+     */
     int getLastClusterIndex(){
         return lastClusterIndex;
     }
 
+    /**
+     * Metodo che converte il ClusterSet in stringa, nascondendo i dati.
+     * @return stringa rappresentante il ClusterSet.
+     */
     public String toString(){
         String str="";
         for(int i=0;i<C.length;i++){
@@ -48,6 +69,11 @@ class ClusterSet implements Serializable {
         return str;
     }
 
+    /**
+     * Metodo che converte il ClusterSet in stringa, mostrando i dati.
+     * @param data dati da mostrare.
+     * @return stringa rappresentante il ClusterSet.
+     */
     String toString(Data data){
         String str="";
         for(int i=0;i<C.length;i++){
@@ -60,6 +86,12 @@ class ClusterSet implements Serializable {
 
     }
 
+    /**
+     * Metodo che unisce due Cluster vicini sulla base di Average distance o Single-Link distance.
+     * @param distance parametro indicante Single-Link o Average-Link distance.
+     * @param data dati contenuti nel cluster.
+     * @return ClusterSet unito.
+     */
     ClusterSet mergeClosestClusters(ClusterDistance distance, Data data) {
         double min_dist = Double.MAX_VALUE;
         double dist = 0;
