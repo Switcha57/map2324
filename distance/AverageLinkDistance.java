@@ -10,7 +10,7 @@ public class AverageLinkDistance implements ClusterDistance{
      * @param c1 cluster 1
      * @param c2 cluster 2
      * @param d distanza tra i due cluster
-     * @return
+     * @return distanza tra due cluster.
      */
     public double distance(Cluster c1, Cluster c2, Data d) {
         double dist = 0;

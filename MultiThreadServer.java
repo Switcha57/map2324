@@ -1,10 +1,16 @@
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.SocketException;
 
 public class MultiThreadServer {
     static private int port;
+
+    /**
+     * Metodo Main che inizilizza un ServerSocket e attende una connessione dal client;
+     * alla connesione procede con l'inizilizzazione di un oggetto ServerOneClient.
+     * @param args porta di connessione.
+     * @throws IOException
+     */
     public static void main(String[] args) throws IOException {
         //port = Integer.parseInt(args[0]);
         port = 1234;

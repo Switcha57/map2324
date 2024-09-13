@@ -1,8 +1,6 @@
-import clustering.Cluster;
 import clustering.HierachicalClusterMiner;
 import clustering.InvalidDepthException;
 import data.Data;
-import data.InvalidSizeException;
 import data.NoDataException;
 import database.DatabaseConnectionException;
 import database.DbAccess;
@@ -11,14 +9,10 @@ import database.MissingNumberException;
 import distance.AverageLinkDistance;
 import distance.ClusterDistance;
 import distance.SingleLinkDistance;
-
 import java.io.*;
-import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.List;
 
 public class ServerOneClient extends Thread{
     private Socket s;
@@ -30,7 +24,11 @@ public class ServerOneClient extends Thread{
     private ObjectOutputStream out;
     private String tempfile;
 
-
+    /**
+     * Costruttore della classe ServerOneClient.
+     * @param socket socket di comunicazione.
+     * @throws Exception
+     */
     public ServerOneClient(Socket socket) throws Exception {
         s = socket;
         in = new ObjectInputStream(socket.getInputStream());
@@ -38,6 +36,9 @@ public class ServerOneClient extends Thread{
         start();
     }
 
+    /**
+     * Metodo che instanzia un thread di comunicazione tra server e client.
+     */
     public void run() {
         try {
             int coso = -1;
@@ -64,7 +65,7 @@ public class ServerOneClient extends Thread{
                     System.out.println("tablename: "+tablename);
                 } else if (opzione == 2) {
                     System.out.println(opzione);
-                    ArrayList<String> tb = getTables(c); //<- qua ci arrivo quando scelto importa
+                    ArrayList<String> tb = getTables(c);
                     out.writeObject(tb);
                     coso = (Integer) in.readObject();
                     tablename = (String) in.readObject();
@@ -143,11 +144,26 @@ public class ServerOneClient extends Thread{
             }
         }
     }
+
+    /**
+     * Metodo che controlla l'esistenza di una tabella nel database.
+     * @param conn oggetto connessione del server.
+     * @param table nome della tabella.
+     * @return vero se esiste, falso altrimenti.
+     * @throws SQLException
+     */
     private static boolean existTable (Connection conn, String table) throws SQLException {
         DatabaseMetaData md = conn.getMetaData();
         ResultSet rs = md.getTables(null, null, table, new String[] {"TABLE"});
         return rs.next();
     }
+
+    /**
+     * Metodo che restituisce un ArrayList contenente i nomi delle tabelle.
+     * @param conn oggetto di connessione al server.
+     * @return ArrayList contenente i nomi delle tabelle.
+     * @throws SQLException
+     */
     private static ArrayList<String> getTables (Connection conn) throws SQLException {
         ArrayList<String> tables = new ArrayList<>();
         DatabaseMetaData md = conn.getMetaData();
@@ -158,6 +174,11 @@ public class ServerOneClient extends Thread{
         return tables;
     }
 
+    /**
+     * Metodo che controlla l'esistenza di un file.
+     * @param filename nome del file.
+     * @return vero se esiste, falso altrimenti.
+     */
     private static boolean existFile (String filename) {
         File f = new File(".\\res\\" + filename); //percorso assoluto tanto per, dopo lo cambio
         if (f.exists() && !f.isDirectory()) {
@@ -166,6 +187,11 @@ public class ServerOneClient extends Thread{
         return false;
     }
 
+    /**
+     * Metodo che restituisce un ArrayList contenente i nomi dei file.
+     * @param Tablename directory contenente i file.
+     * @return ArrayList contenente i nomi dei file.
+     */
     private static ArrayList<String> showFile (String Tablename){
         ArrayList<String> list = new ArrayList<>();
         String dirpath = ".\\res\\"+ Tablename+"\\";
@@ -179,6 +205,14 @@ public class ServerOneClient extends Thread{
         return list;
     }
 
+    /**
+     * Metodo che, in base alla scelta, effettua il mine su un dendogramma e salva il dendogramma da minare su file.
+     * @param scelta scelta dell'utente rappresentate la distanza da utilizzare (Single-Link Distance o Average-Link Distance)
+     * @param data dati del dendogramma.
+     * @param clustering oggetto su cui effettuare il mine.
+     * @return ArrayList contenente sia il dendogramma normale che minato.
+     * @throws InvalidDepthException
+     */
     private static ArrayList<Object> ClusterDistance(int scelta, Data data, HierachicalClusterMiner clustering) throws InvalidDepthException {
         ClusterDistance distance = null;
         ArrayList<Object> ob = new ArrayList<>();
@@ -202,6 +236,14 @@ public class ServerOneClient extends Thread{
         return ob;
     }
 
+    /**
+     * Metodo che crea una tabella nel database e la popola.
+     * @param conn oggetto di connessione al db.
+     * @return nome della tabella.
+     * @throws IOException
+     * @throws ClassNotFoundException
+     * @throws SQLException
+     */
     public String createTable(Connection conn) throws IOException, ClassNotFoundException, SQLException {
         Statement stmt = conn.createStatement();
         String tablename = (String) in.readObject();

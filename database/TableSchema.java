@@ -55,7 +55,7 @@ public class TableSchema {
             return name+":"+type;
         }
     }
-    List<Column> tableSchema=new ArrayList<Column>();
+    List<Column> tableSchema=new ArrayList<>();
 
     /**
      * Costruttore della classe TableSchema.
