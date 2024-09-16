@@ -9,13 +9,12 @@ import java.util.TreeSet;
 public class Cluster implements Iterable<Integer>, Cloneable, Serializable {
 
     private Set<Integer> clusteredData = new TreeSet<>();
-    //private Integer[] clusteredData =new Integer[0];
 
     /**
      * Aggiunge un indice di un Example al cluster.
      * @param id indice dell'Example da aggiungere al cluster.
      */
-    void addData(int id){
+    public void addData(int id){
         clusteredData.add(id);
     }
 
@@ -76,7 +75,7 @@ public class Cluster implements Iterable<Integer>, Cloneable, Serializable {
      * @param data valori associati agli indici del cluster.
      * @return la rappresentazione in stringa.
      */
-    String toString(Data data){
+    public String toString(Data data){
         StringBuilder str = new StringBuilder();
         Iterator<Integer> it = clusteredData.iterator();
         while(it.hasNext()){

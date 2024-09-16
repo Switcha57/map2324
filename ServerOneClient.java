@@ -180,7 +180,7 @@ public class ServerOneClient extends Thread{
      * @return vero se esiste, falso altrimenti.
      */
     private static boolean existFile (String filename) {
-        File f = new File(".\\res\\" + filename); //percorso assoluto tanto per, dopo lo cambio
+        File f = new File(".\\res\\" + filename);
         if (f.exists() && !f.isDirectory()) {
             return true;
         }
@@ -244,7 +244,7 @@ public class ServerOneClient extends Thread{
      * @throws ClassNotFoundException
      * @throws SQLException
      */
-    public String createTable(Connection conn) throws IOException, ClassNotFoundException, SQLException {
+    private String createTable(Connection conn) throws IOException, ClassNotFoundException, SQLException {
         Statement stmt = conn.createStatement();
         String tablename = (String) in.readObject();
         String query1 = (String) in.readObject();

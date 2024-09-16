@@ -12,8 +12,7 @@ public class MultiThreadServer {
      * @throws IOException
      */
     public static void main(String[] args) throws IOException {
-        //port = Integer.parseInt(args[0]);
-        port = 1234;
+        port = Integer.parseInt(args[0]);
         ServerSocket s = new ServerSocket(port);
         try {
             while (true) {

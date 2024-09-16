@@ -27,7 +27,7 @@ class ClusterSet implements Serializable {
      */
     void add(Cluster c){
         for(int j=0;j<lastClusterIndex;j++)
-            if(c==C[j]) // to avoid duplicates
+            if(c==C[j])
                 return;
         C[lastClusterIndex]=c;
         lastClusterIndex++;
@@ -74,7 +74,7 @@ class ClusterSet implements Serializable {
      * @param data dati da mostrare.
      * @return stringa rappresentante il ClusterSet.
      */
-    String toString(Data data){
+    public String toString(Data data){
         String str="";
         for(int i=0;i<C.length;i++){
             if (C[i]!=null){
@@ -126,13 +126,6 @@ class ClusterSet implements Serializable {
                 NewSet.add(this.get(i));
             }
         }
-
-        /*for(int i=0;i<array[0].getSize();i++){
-            newC.addData(array[0].getElement(i));
-        }
-        for(int i=0;i<array[1].getSize();i++){
-            newC.addData(array[1].getElement(i));
-        }*/
         return NewSet;
     }
 }

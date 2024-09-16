@@ -30,7 +30,7 @@ public class Example implements Iterable<Double>{
      * @return elemento di example alla posizione indicata da index
      * @throws ArrayIndexOutOfBoundsException
      */
-    double getExample(int index) throws ArrayIndexOutOfBoundsException{
+    public double getExample(int index) throws ArrayIndexOutOfBoundsException{
             return example.get(index);
     }
 
@@ -47,7 +47,7 @@ public class Example implements Iterable<Double>{
      * Metodo che restituisce la grandezza di example
      * @return grandezza di example
      */
-    int getSize(){
+    public int getSize(){
         return example.size();
     }
 
