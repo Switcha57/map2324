@@ -11,29 +11,28 @@ import java.util.List;
 
 public class TableData {
     private DbAccess db;
+
+    /**
+     * Costruttore della classe TableData.
+     * @param db oggetto rappresentante l'accesso al db.
+     */
     public TableData(DbAccess db) {
         this.db = db;
     }
 
-    public List<Example> getDistinctTransazioni(String table) throws SQLException,
-            EmptySetException,MissingNumberException {
-        List<Example> distinctExamples = new ArrayList<Example>();
+    /**
+     * Metodo che interroga la tabella con nome table nel database e restituisce la
+     * lista di Example memorizzata nella tabella.
+     * @param table nome della tabella nel database.
+     * @return lista di Example.
+     */
+    public List<Example> getDistinctTransazioni(String table) {
+        List<Example> distinctExamples = new ArrayList<>();
         try{
             Statement s = db.getConnection().createStatement();
-
-            // codice SQL: può generare l’eccezione SQLException
-
-            ResultSet r = s.executeQuery(
-                    "select *" + " from "+ table);
-
+            ResultSet r = s.executeQuery("select *" + " from "+ table);
             while(r.next()) {
-                // Capitalization doesn't matter:
-                // In alternativa: accesso posizionale
-                /*System.out.println(
-                        r.getString(2) + ", "
-                                + r.getString(1)
-                                + ": " + r.getString(3) );
-                 */
+
                 Example e = new Example();
                 ResultSetMetaData rsmd = r.getMetaData();
                 int columnsNumber = rsmd.getColumnCount();
@@ -43,10 +42,9 @@ public class TableData {
                 distinctExamples.add(e);
             }
             r.close();
-            s.close(); // Also closes ResultSet
+            s.close();
 
         } catch (SQLException ex) {
-            // handle any errors
             System.out.println("SQLException: " + ex.getMessage());
             System.out.println("SQLState: " + ex.getSQLState());
             System.out.println("VendorError: " + ex.getErrorCode());

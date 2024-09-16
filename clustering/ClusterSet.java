@@ -4,12 +4,16 @@ import distance.*;
 
 import java.io.Serializable;
 
-class ClusterSet implements Serializable {
+public class ClusterSet implements Serializable {
 
     private Cluster[] C;
     private int lastClusterIndex=0;
 
-    ClusterSet(int k){
+    /**
+     * Costruttore della classe ClusterSet.
+     * @param k grandezza del cluster.
+     */
+    public ClusterSet(int k){
         if(k<0){
             throw new IllegalArgumentException("la grandezza deve essere maggiore di 0");
         }else{
@@ -17,15 +21,24 @@ class ClusterSet implements Serializable {
         }
     }
 
-    void add(Cluster c){
+    /**
+     * Metodo che aggiunge un cluster al CluserSet.
+     * @param c cluster da aggiungere.
+     */
+    public void add(Cluster c){
         for(int j=0;j<lastClusterIndex;j++)
-            if(c==C[j]) // to avoid duplicates
+            if(c==C[j])
                 return;
         C[lastClusterIndex]=c;
         lastClusterIndex++;
     }
 
-    Cluster get(int i){
+    /**
+     * Metodo che recupera il cluster in un determinato indice.
+     * @param i indice del cluster.
+     * @return cluster selezionato.
+     */
+    public Cluster get(int i){
         if (i<0 || i>C.length-1){
             throw new ArrayIndexOutOfBoundsException("Indice deve essere compreso tra 0 e " + (C.length-1));
         }else{
@@ -33,10 +46,18 @@ class ClusterSet implements Serializable {
         }
     }
 
-    int getLastClusterIndex(){
+    /**
+     * Metodo che ritorna l'indice dell'ultimo cluster.
+     * @return indice dell'ultimo cluster.
+     */
+    public int getLastClusterIndex(){
         return lastClusterIndex;
     }
 
+    /**
+     * Metodo che converte il ClusterSet in stringa, nascondendo i dati.
+     * @return stringa rappresentante il ClusterSet.
+     */
     public String toString(){
         String str="";
         for(int i=0;i<C.length;i++){
@@ -48,7 +69,12 @@ class ClusterSet implements Serializable {
         return str;
     }
 
-    String toString(Data data){
+    /**
+     * Metodo che converte il ClusterSet in stringa, mostrando i dati.
+     * @param data dati da mostrare.
+     * @return stringa rappresentante il ClusterSet.
+     */
+    public String toString(Data data){
         String str="";
         for(int i=0;i<C.length;i++){
             if (C[i]!=null){
@@ -60,7 +86,13 @@ class ClusterSet implements Serializable {
 
     }
 
-    ClusterSet mergeClosestClusters(ClusterDistance distance, Data data) {
+    /**
+     * Metodo che unisce due Cluster vicini sulla base di Average distance o Single-Link distance.
+     * @param distance parametro indicante Single-Link o Average-Link distance.
+     * @param data dati contenuti nel cluster.
+     * @return ClusterSet unito.
+     */
+    public ClusterSet mergeClosestClusters(ClusterDistance distance, Data data) {
         double min_dist = Double.MAX_VALUE;
         double dist = 0;
         int c1 = 0;
@@ -94,13 +126,6 @@ class ClusterSet implements Serializable {
                 NewSet.add(this.get(i));
             }
         }
-
-        /*for(int i=0;i<array[0].getSize();i++){
-            newC.addData(array[0].getElement(i));
-        }
-        for(int i=0;i<array[1].getSize();i++){
-            newC.addData(array[1].getElement(i));
-        }*/
         return NewSet;
     }
 }
