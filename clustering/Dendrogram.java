@@ -13,7 +13,7 @@ public class Dendrogram implements Serializable {
      */
     public Dendrogram(int length) throws InvalidDepthException{
         if(length > Data.getNumberOfExamples()){
-            throw new InvalidDepthException("la profondità dell'albero è superiore al numero di esempi del dataset "+Data.getNumberOfExamples());
+            throw new InvalidDepthException("la profondità dell'albero è superiore al numero di esempi del dataset: "+Data.getNumberOfExamples());
         }else{
             tree = new ClusterSet[length];
         }
