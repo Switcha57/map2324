@@ -4,7 +4,7 @@ import distance.*;
 
 import java.io.Serializable;
 
-class ClusterSet implements Serializable {
+public class ClusterSet implements Serializable {
 
     private Cluster[] C;
     private int lastClusterIndex=0;
@@ -13,7 +13,7 @@ class ClusterSet implements Serializable {
      * Costruttore della classe ClusterSet.
      * @param k grandezza del cluster.
      */
-    ClusterSet(int k){
+    public ClusterSet(int k){
         if(k<0){
             throw new IllegalArgumentException("la grandezza deve essere maggiore di 0");
         }else{
@@ -25,7 +25,7 @@ class ClusterSet implements Serializable {
      * Metodo che aggiunge un cluster al CluserSet.
      * @param c cluster da aggiungere.
      */
-    void add(Cluster c){
+    public void add(Cluster c){
         for(int j=0;j<lastClusterIndex;j++)
             if(c==C[j])
                 return;
@@ -38,7 +38,7 @@ class ClusterSet implements Serializable {
      * @param i indice del cluster.
      * @return cluster selezionato.
      */
-    Cluster get(int i){
+    public Cluster get(int i){
         if (i<0 || i>C.length-1){
             throw new ArrayIndexOutOfBoundsException("Indice deve essere compreso tra 0 e " + (C.length-1));
         }else{
@@ -50,7 +50,7 @@ class ClusterSet implements Serializable {
      * Metodo che ritorna l'indice dell'ultimo cluster.
      * @return indice dell'ultimo cluster.
      */
-    int getLastClusterIndex(){
+    public int getLastClusterIndex(){
         return lastClusterIndex;
     }
 
@@ -92,7 +92,7 @@ class ClusterSet implements Serializable {
      * @param data dati contenuti nel cluster.
      * @return ClusterSet unito.
      */
-    ClusterSet mergeClosestClusters(ClusterDistance distance, Data data) {
+    public ClusterSet mergeClosestClusters(ClusterDistance distance, Data data) {
         double min_dist = Double.MAX_VALUE;
         double dist = 0;
         int c1 = 0;

@@ -11,7 +11,7 @@ public class Dendrogram implements Serializable {
      * @param length lunghezza del dendogramma.
      * @throws InvalidDepthException
      */
-    Dendrogram(int length) throws InvalidDepthException{
+    public Dendrogram(int length) throws InvalidDepthException{
         if(length > Data.getNumberOfExamples()){
             throw new InvalidDepthException("la profondità dell'albero è superiore al numero di esempi del dataset "+Data.getNumberOfExamples());
         }else{
@@ -25,7 +25,7 @@ public class Dendrogram implements Serializable {
      * @param c ClusterSet da aggiungere.
      * @param level livello a cui aggiungere un dendogramma.
      */
-    void setClusterSet(ClusterSet c, int level){
+    public void setClusterSet(ClusterSet c, int level){
         if(level<0 || level>tree.length-1){
             throw new ArrayIndexOutOfBoundsException("Indice deve essere compreso tra 0 e " + (tree.length-1));
         }else{
@@ -39,7 +39,7 @@ public class Dendrogram implements Serializable {
      * @param level livello da cui recuperare il ClusterSet.
      * @return ClusterSet al livello level.
      */
-    ClusterSet getClusterSet(int level){
+    public ClusterSet getClusterSet(int level){
         if(level<0 || level>tree.length-1){
             throw new ArrayIndexOutOfBoundsException("Indice deve essere compreso tra 0 e " + (tree.length-1));
         }else{
@@ -51,7 +51,7 @@ public class Dendrogram implements Serializable {
      * Metodo getter che ritorna la profondità del dendogramma.
      * @return profondità del dendogramma.
      */
-    int getDepth(){
+    public int getDepth(){
         return tree.length;
     }
 
