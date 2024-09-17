@@ -120,7 +120,7 @@ public class ServerOneClient extends Thread{
                             out.writeObject(mess);
                         }while (!mess.equals("OK"));
 
-                        ArrayList<Object> ob = ClusterDistance(scelta, data, clustering);
+                        ArrayList<Object> ob = clusterDistance(scelta, data, clustering);
                         out.writeObject(ob.getLast());
                         filename =  (String) in.readObject();
                         clustering = (HierachicalClusterMiner) ob.getFirst();
@@ -215,7 +215,7 @@ public class ServerOneClient extends Thread{
      * @return ArrayList contenente sia il dendogramma normale che minato.
      * @throws InvalidDepthException
      */
-    private static ArrayList<Object> ClusterDistance(int scelta, Data data, HierachicalClusterMiner clustering) throws InvalidDepthException {
+    private static ArrayList<Object> clusterDistance(int scelta, Data data, HierachicalClusterMiner clustering) throws InvalidDepthException {
         ClusterDistance distance = null;
         ArrayList<Object> ob = new ArrayList<>();
         switch (scelta) {
