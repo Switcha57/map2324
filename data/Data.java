@@ -23,7 +23,7 @@ public class Data {
             data = td.getDistinctTransazioni(tableName);
             numberOfExamples = data.size();
         } catch (EmptySetException | MissingNumberException | SQLException e) {
-            throw new NoDataException("Dati non trovati");
+            throw new NoDataException("Dati non trovati."+ e.toString().split(":")[1]);
         }
     }
     /**

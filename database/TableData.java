@@ -47,7 +47,7 @@ public class TableData {
                 ResultSetMetaData rsmd = r.getMetaData();
                 int columnsNumber = rsmd.getColumnCount();
                 for (int i = 1; i <= columnsNumber; i++) {
-                    if (rsmd.getColumnType(i) != Types.DOUBLE) {
+                    if (rsmd.getColumnType(i) != Types.REAL) {
                         throw new MissingNumberException("Sono presenti una o più colonne non contenenti valori reali");
                     }
                     e.addExample(r.getDouble(i));
