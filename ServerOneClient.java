@@ -17,13 +17,8 @@ import java.util.ArrayList;
  */
 public class ServerOneClient extends Thread{
     private Socket s;
-    private DbAccess db = new DbAccess();
-    private Data data;
-    private HierachicalClusterMiner clustering = null;
-    private ArrayList<Object> ob;
     private ObjectInputStream in;
     private ObjectOutputStream out;
-    private String tempfile;
 
     /**
      * Costruttore della classe ServerOneClient.
@@ -45,10 +40,12 @@ public class ServerOneClient extends Thread{
             int controllo = -1;
             String tablename = "";
             boolean flag = true;
+            DbAccess db = new DbAccess();
             Connection c = db.getConnection();
             while (flag) {
                 int opzione = (Integer) in.readObject();
                 String msg;
+                Data data=null;
                 if (opzione == 1) {
                     System.out.println("opzione: "+opzione);
                     msg = createTable(c);
@@ -83,11 +80,13 @@ public class ServerOneClient extends Thread{
                 System.out.println("In attesa della scelta (file o database)");
                 int scelta = (Integer) in.readObject();
                 System.out.println("Scelta: " + scelta);
+                String tempfile,filename;
+                HierachicalClusterMiner clustering = null;
                 switch (scelta) {
                     case 1:
                         ArrayList<String> list = showFile(tablename);
                         out.writeObject(list);
-                        String filename = tablename+"\\"+(String) in.readObject();
+                        filename = tablename+"\\"+(String) in.readObject();
                         System.out.println(filename);
                         if (existFile(filename)){
                             out.writeObject("OK");
@@ -121,7 +120,7 @@ public class ServerOneClient extends Thread{
                             out.writeObject(mess);
                         }while (!mess.equals("OK"));
 
-                        ob = ClusterDistance(scelta,data,clustering);
+                        ArrayList<Object> ob = ClusterDistance(scelta, data, clustering);
                         out.writeObject(ob.getLast());
                         filename =  (String) in.readObject();
                         clustering = (HierachicalClusterMiner) ob.getFirst();
@@ -168,7 +167,7 @@ public class ServerOneClient extends Thread{
      * Metodo che restituisce un ArrayList contenente i nomi delle tabelle.
      * @param conn oggetto di connessione al server.
      * @return ArrayList contenente i nomi delle tabelle.
-     * @throws SQLException
+     * @throws SQLException errore nella query
      */
     private static ArrayList<String> getTables (Connection conn) throws SQLException {
         ArrayList<String> tables = new ArrayList<>();
@@ -187,10 +186,7 @@ public class ServerOneClient extends Thread{
      */
     private static boolean existFile (String filename) {
         File f = new File(".\\res\\" + filename);
-        if (f.exists() && !f.isDirectory()) {
-            return true;
-        }
-        return false;
+        return f.exists() && !f.isDirectory();
     }
 
     /**
