@@ -4,7 +4,7 @@ import java.util.*;
 import static java.lang.Math.pow;
 
 /**
- * Classe che modella l'enitità esempio
+ * Classe che modella l'entità esempio.
  */
 public class Example implements Iterable<Double>{
     private List<Double> example;

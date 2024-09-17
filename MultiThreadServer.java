@@ -2,12 +2,15 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+/**
+ * Classe che si occupa di gestire le comunicazioni multiple tra client e server attraverso i thread.
+ */
 public class MultiThreadServer {
     static private int port;
 
     /**
-     * Metodo main che inizilizza un ServerSocket e attende una connessione dal client;
-     * alla connesione procede con l'inizilizzazione di un oggetto ServerOneClient.
+     * Metodo main che inizializza un ServerSocket e attende una connessione dal client;
+     * alla connesione procede con l'inizializzazione di un oggetto ServerOneClient.
      * @param args porta di connessione.
      * @throws IOException
      */

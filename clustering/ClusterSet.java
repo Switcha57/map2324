@@ -4,9 +4,17 @@ import distance.*;
 
 import java.io.Serializable;
 
+/**
+ * Classe che modella un insieme di Cluster.
+ */
 public class ClusterSet implements Serializable {
-
+    /**
+     * Array di oggetti Cluster.
+     */
     private Cluster[] C;
+    /**
+     * Indice dell'ultimo cluster inserito.
+     */
     private int lastClusterIndex=0;
 
     /**
@@ -55,7 +63,7 @@ public class ClusterSet implements Serializable {
     }
 
     /**
-     * Metodo che converte il ClusterSet in stringa, nascondendo i dati.
+     * Metodo che converte un oggetto ClusterSet in stringa, nascondendo i dati.
      * @return stringa rappresentante il ClusterSet.
      */
     public String toString(){
@@ -70,7 +78,7 @@ public class ClusterSet implements Serializable {
     }
 
     /**
-     * Metodo che converte il ClusterSet in stringa, mostrando i dati.
+     * Metodo che converte un oggetto ClusterSet in stringa, mostrando i dati.
      * @param data dati da mostrare.
      * @return stringa rappresentante il ClusterSet.
      */

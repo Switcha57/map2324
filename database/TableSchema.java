@@ -9,8 +9,9 @@ import java.util.HashMap;
 import java.util.List;
 
 
-
-
+/**
+ * Classe che rappresenta la struttura di una tabella del database.
+ */
 public class TableSchema {
     private DbAccess db;
 

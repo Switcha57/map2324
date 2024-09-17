@@ -1,7 +1,7 @@
 package clustering;
 
 /**
- * Classe indicante eccezione personalizzata rappresentante una profondità non valida.
+ * Classe indicante un eccezione personalizzata rappresentante una profondità non valida.
  */
 public class InvalidDepthException extends Exception {
     /**

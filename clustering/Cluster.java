@@ -6,8 +6,15 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 
+/**
+ * Classe che modella un cluster come la
+ * collezione delle posizioni occupate dagli esempi raggruppati nel Cluster nella lista
+ * data dell’oggetto che modella il dataset su cui il clustering è calcolato.
+ */
 public class Cluster implements Iterable<Integer>, Cloneable, Serializable {
-
+    /**
+     * Ogetto TreeSet contenente oggetti Integer.
+     */
     private Set<Integer> clusteredData = new TreeSet<>();
 
     /**
@@ -55,7 +62,7 @@ public class Cluster implements Iterable<Integer>, Cloneable, Serializable {
     }
 
     /**
-     * Rappresentazione in stringa della classe.
+     * Rappresentazione in stringa di un oggetto Cluster nascondendo i dati.
      * @return la rappresentazione in stringa.
      */
     public String toString() {
@@ -71,7 +78,7 @@ public class Cluster implements Iterable<Integer>, Cloneable, Serializable {
     }
 
     /**
-     * Rappresentazione in stringa della classe.
+     * Rappresentazione in stringa di un oggetto Cluster mostrando i dati.
      * @param data valori associati agli indici del cluster.
      * @return la rappresentazione in stringa.
      */

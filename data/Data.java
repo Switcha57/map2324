@@ -8,12 +8,15 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * Costruttore di data
+ * Classe che aggrega la classe Example.
  */
 public class Data {
     private List<Example> data = new ArrayList<>();
     private static int numberOfExamples=0;
-
+    /**
+     * Costruttore di data
+     * @param tableName nome della tabella.
+     */
     public Data(String tableName) throws NoDataException{
         TableData td = new TableData(new DbAccess());
         try {
@@ -23,8 +26,6 @@ public class Data {
             throw new NoDataException("Dati non trovati");
         }
     }
-
-
     /**
      * Getter numero di esempi
      *
@@ -33,7 +34,6 @@ public class Data {
     static public int getNumberOfExamples() {
         return numberOfExamples;
     }
-
     /**
      * Getter di un example Sapendo l'indice
      * @param exampleIndex indice di example contenuto in uno cluster
@@ -43,7 +43,6 @@ public class Data {
     public Example getExample(int exampleIndex) throws ArrayIndexOutOfBoundsException {
         return data.get(exampleIndex);
     }
-
     /**
      * Restituisce la matrice triangolare superiore delle distanze
      * @return matrice triangolare superiore delle distanze Euclidee calcolate tra gli
@@ -60,7 +59,6 @@ public class Data {
         }
         return dis;
     }
-
     /**
      * Metodo toString
      * @return rappresentazione in stringa di Data

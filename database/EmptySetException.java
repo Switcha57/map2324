@@ -1,6 +1,6 @@
 package database;
 /**
- * Classe indicante eccezione personalizzata rappresentante un set vuoto.
+ * Classe indicante un eccezione personalizzata rappresentante un set vuoto.
  */
 public class EmptySetException extends Exception {
     /**

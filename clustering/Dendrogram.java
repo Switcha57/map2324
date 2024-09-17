@@ -3,7 +3,13 @@ import data.*;
 
 import java.io.Serializable;
 
+/**
+ * Classe che modella l'entità dendogramma come un array di ClusterSet.
+ */
 public class Dendrogram implements Serializable {
+    /**
+     * Array di oggetti ClusterSet.
+     */
     private ClusterSet [] tree;
 
     /**
@@ -67,6 +73,7 @@ public class Dendrogram implements Serializable {
     }
     /**
      * Metodo che traduce il dendogramma in stringa mostrando i dati.
+     * @param data dati del dendogramma.
      * @return stringa rappresentante il dendogramma.
      */
     public String toString(Data data) throws InvalidDepthException {

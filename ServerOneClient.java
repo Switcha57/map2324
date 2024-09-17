@@ -4,8 +4,6 @@ import data.Data;
 import database.NoDataException;
 import database.DatabaseConnectionException;
 import database.DbAccess;
-import database.EmptySetException;
-import database.MissingNumberException;
 import distance.AverageLinkDistance;
 import distance.ClusterDistance;
 import distance.SingleLinkDistance;
@@ -14,6 +12,9 @@ import java.net.Socket;
 import java.sql.*;
 import java.util.ArrayList;
 
+/**
+ * Classe si occupa della comunicazione tra client e server.
+ */
 public class ServerOneClient extends Thread{
     private Socket s;
     private DbAccess db = new DbAccess();
@@ -37,7 +38,7 @@ public class ServerOneClient extends Thread{
     }
 
     /**
-     * Metodo che instanzia un thread di comunicazione tra server e client.
+     * Metodo che istanzia un thread di comunicazione tra server e client.
      */
     public void run() {
         try {

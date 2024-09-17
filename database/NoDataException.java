@@ -1,6 +1,6 @@
 package database;
 /**
- * Classe indicante eccezione personalizzata rappresentante l'assenza di dati..
+ * Classe indicante un eccezione personalizzata rappresentante l'assenza di dati.
  */
 public class NoDataException extends Exception {
     /**

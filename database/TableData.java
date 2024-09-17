@@ -6,6 +6,9 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Classe che si occupa recupare e descrivere gli elementi di un database.
+ */
 public class TableData {
     private DbAccess db;
 

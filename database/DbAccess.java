@@ -5,9 +5,8 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 /**
- * Gestisce l'accesso al DB per la lettura dei dati di training
+ * Gestisce l'accesso al DB per la lettura dei dati di training.
  * @author Map Tutor
- *
  */
 public class DbAccess {
 

@@ -4,6 +4,9 @@ import clustering.*;
 
 import java.util.Iterator;
 
+/**
+ * Classe che implementa l'interfaccia ClusterDistance e implementa la distanza average-link tra cluster.
+ */
 public class AverageLinkDistance implements ClusterDistance{
     /**
      * Distanza tra cluster calcolata in average-link

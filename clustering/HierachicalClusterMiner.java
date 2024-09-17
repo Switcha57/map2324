@@ -4,8 +4,13 @@ import distance.*;
 
 import java.io.*;
 
+/**
+ * Classe che aggrega la classe Dendogram.
+ */
 public class HierachicalClusterMiner implements Serializable {
-
+    /**
+     * Oggetto dendogramma.
+     */
     private Dendrogram dendrogram;
 
     /**
@@ -25,6 +30,7 @@ public class HierachicalClusterMiner implements Serializable {
     }
     /**
      * Metodo che richiama il metodo toString di Dendogram.
+     * @param data dati del dendogramma.
      * @return stringa rappresentante il dendogramma mostrando i dati.
      */
     public String toString(Data data) throws InvalidDepthException {

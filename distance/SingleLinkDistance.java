@@ -4,6 +4,9 @@ import clustering.*;
 
 import java.util.Iterator;
 
+/**
+ * Classe che implementa l'interfaccia ClusterDistance e implementa la distanza single-link tra cluster.
+ */
 public class SingleLinkDistance implements ClusterDistance {
 
     /**

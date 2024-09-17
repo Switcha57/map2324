@@ -1,6 +1,6 @@
 package database;
 /**
- * Classe indicante eccezione personalizzata rappresentante la presenza di attributi non numerici.
+ * Classe indicante un eccezione personalizzata rappresentante la presenza di attributi non numerici.
  */
 public class MissingNumberException extends Exception {
     /**

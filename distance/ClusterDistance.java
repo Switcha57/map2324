@@ -3,7 +3,7 @@ import data.*;
 import clustering.*;
 
 /**
- * Interfaccia contenente l'operazione distance da implementare.
+ * Interfaccia contenente l'operazione distance che calcola la distanza tra cluster, da implementare.
  */
 public interface ClusterDistance {
      /**

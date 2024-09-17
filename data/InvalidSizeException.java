@@ -1,6 +1,6 @@
 package data;
 /**
- * Classe indicante eccezione personalizzata rappresentante una grandezza non valida.
+ * Classe indicante un eccezione personalizzata rappresentante una grandezza non valida.
  */
 public class InvalidSizeException extends Exception {
     /**
