@@ -1,7 +1,7 @@
 import clustering.HierachicalClusterMiner;
 import clustering.InvalidDepthException;
 import data.Data;
-import database.NoDataException;
+import data.NoDataException;
 import database.DatabaseConnectionException;
 import database.DbAccess;
 import distance.AverageLinkDistance;
