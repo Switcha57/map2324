@@ -1,7 +1,7 @@
 import clustering.HierachicalClusterMiner;
 import clustering.InvalidDepthException;
 import data.Data;
-import data.NoDataException;
+import database.NoDataException;
 import database.DatabaseConnectionException;
 import database.DbAccess;
 import database.EmptySetException;
@@ -41,7 +41,7 @@ public class ServerOneClient extends Thread{
      */
     public void run() {
         try {
-            int coso = -1;
+            int controllo = -1;
             String tablename = "";
             boolean flag = true;
             Connection c = db.getConnection();
@@ -51,9 +51,9 @@ public class ServerOneClient extends Thread{
                 if (opzione == 1) {
                     System.out.println("opzione: "+opzione);
                     msg = createTable(c);
-                    coso = (Integer) in.readObject();
+                    controllo = (Integer) in.readObject();
                     tablename = msg;
-                    if (coso == 0) {
+                    if (controllo == 0) {
                         data = new Data(tablename);
                         System.out.println("Tabella accettata\n");
                     } else {
@@ -61,17 +61,17 @@ public class ServerOneClient extends Thread{
                         System.out.println("Tabella non accettata\n");
                         continue;
                     }
-                    System.out.println("Coso: "+coso);
+                    System.out.println("Coso: "+controllo);
                     System.out.println("tablename: "+tablename);
                 } else if (opzione == 2) {
-                    System.out.println(opzione);
+                    System.out.println("opzione: "+opzione);
                     ArrayList<String> tb = getTables(c);
                     out.writeObject(tb);
-                    coso = (Integer) in.readObject();
+                    controllo = (Integer) in.readObject();
                     tablename = (String) in.readObject();
-                    if (coso == 0) {
-                        out.writeObject("OK");
+                    if (controllo == 0) {
                         data = new Data(tablename);
+                        out.writeObject("OK");
                         System.out.println("Tabella accettata\n");
                     }else {
                         out.writeObject("Errore tabella inesitente");
@@ -133,8 +133,13 @@ public class ServerOneClient extends Thread{
             in.close();
             out.close();
         }catch (IOException | ClassNotFoundException | DatabaseConnectionException | SQLException | NoDataException |
-                EmptySetException | MissingNumberException | InvalidDepthException e) {
+                InvalidDepthException e) {
             System.out.println("Il client ha interrotto la connessione con l'errore:" + e);
+            try {
+                out.writeObject(e.toString());
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
 
         } finally {
             try {

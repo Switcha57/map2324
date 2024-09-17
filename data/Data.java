@@ -1,9 +1,6 @@
 package data;
 
-import database.DbAccess;
-import database.EmptySetException;
-import database.MissingNumberException;
-import database.TableData;
+import database.*;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -17,10 +14,14 @@ public class Data {
     private List<Example> data = new ArrayList<>();
     private static int numberOfExamples=0;
 
-    public Data(String tableName) throws NoDataException, SQLException, EmptySetException, MissingNumberException {
+    public Data(String tableName) throws NoDataException{
         TableData td = new TableData(new DbAccess());
-        data = td.getDistinctTransazioni(tableName);
-        numberOfExamples = data.size();
+        try {
+            data = td.getDistinctTransazioni(tableName);
+            numberOfExamples = data.size();
+        } catch (EmptySetException | MissingNumberException | SQLException e) {
+            throw new NoDataException("Dati non trovati");
+        }
     }
 
 

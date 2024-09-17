@@ -1,4 +1,4 @@
-package data;
+package database;
 /**
  * Classe indicante eccezione personalizzata rappresentante l'assenza di dati..
  */
