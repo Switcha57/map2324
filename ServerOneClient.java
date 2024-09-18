@@ -138,7 +138,7 @@ public class ServerOneClient extends Thread{
             try {
                 out.writeObject(e.toString());
             } catch (IOException ex) {
-                throw new RuntimeException(ex);
+                Thread.currentThread().interrupt();
             }
 
         } finally {
