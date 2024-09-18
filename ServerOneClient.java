@@ -59,8 +59,8 @@ public class ServerOneClient extends Thread{
                         System.out.println("Tabella non accettata\n");
                         continue;
                     }
-                    System.out.println("Coso: "+controllo);
-                    System.out.println("tablename: "+tablename);
+                    System.out.println("Controllo: "+controllo);
+                    System.out.println("Nome tabella: "+tablename);
                 } else if (opzione == 2) {
                     System.out.println("opzione: "+opzione);
                     ArrayList<String> tb = getTables(c);
