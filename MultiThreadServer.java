@@ -31,6 +31,7 @@ public class MultiThreadServer {
                 Socket client = s.accept();
                 try {
                     new ServerOneClient(client);
+                    System.out.println("Client accettato: "+ client.getInetAddress().getHostAddress()+ ":"+client.getPort());
                 } catch (Exception e) {
                     client.close();
                 }
