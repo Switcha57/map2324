@@ -121,9 +121,9 @@ public class ServerOneClient extends Thread{
                         }while (!mess.equals("OK"));
 
                         ArrayList<Object> ob = clusterDistance(scelta, data, clustering);
-                        out.writeObject(ob.getLast());
+                        out.writeObject(ob.get(1));
                         filename =  (String) in.readObject();
-                        clustering = (HierachicalClusterMiner) ob.getFirst();
+                        clustering = (HierachicalClusterMiner) ob.get(0);
                         clustering.salva(tablename, filename);
                         flag = false;
                         break;

@@ -34,12 +34,10 @@ public class TableData {
             ResultSet r = s.executeQuery("select *" + " from "+ table);
             ResultSet rs = s1.executeQuery("select COUNT(*) from " + table);
             int cont = 0;
-            while (rs.next()) {
-                cont = rs.getInt("COUNT(*)");
-                System.out.println("contatore: "+cont);
-                if (cont == 0){
-                    throw new EmptySetException("Non sono  presenti dati nella tabella");
-                }
+            rs.next();
+            cont = rs.getInt("COUNT(*)");
+            if (cont == 0){
+                throw new EmptySetException("Non sono  presenti dati nella tabella");
             }
             rs.close();
             while(r.next()) {
