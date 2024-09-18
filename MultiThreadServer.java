@@ -15,8 +15,17 @@ public class MultiThreadServer {
      * @throws IOException
      */
     public static void main(String[] args) throws IOException {
-        port = Integer.parseInt(args[0]);
-        ServerSocket s = new ServerSocket(port);
+        ServerSocket s = null;
+        try {
+            port = Integer.parseInt(args[0]);
+            s = new ServerSocket(port);
+        }catch ( NumberFormatException e ) {
+            System.err.println("\""+args[0]+"\"" + " non è un valore valido di porta");
+            System.exit(1);
+        } catch (IllegalArgumentException e) {
+            System.err.println("Server non avviabile sulla porta: " + port);
+            System.exit(1);
+        }
         try {
             while (true) {
                 Socket client = s.accept();
