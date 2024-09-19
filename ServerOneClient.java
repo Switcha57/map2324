@@ -36,6 +36,7 @@ public class ServerOneClient extends Thread{
      * Metodo che istanzia un thread di comunicazione tra server e client.
      */
     public void run() {
+        String nomeclient = s.getInetAddress().getHostAddress()+":"+s.getPort();
         try {
             int controllo = -1;
             String tablename = "";
@@ -47,22 +48,22 @@ public class ServerOneClient extends Thread{
                 String msg;
                 Data data=null;
                 if (opzione == 1) {
-                    System.out.println("opzione: "+opzione);
+                    System.out.println(nomeclient+": opzione: "+opzione);
                     msg = createTable(c);
                     controllo = (Integer) in.readObject();
                     tablename = msg;
                     if (controllo == 0) {
                         data = new Data(tablename);
-                        System.out.println("Tabella accettata\n");
+                        System.out.println(nomeclient+": Tabella accettata\n");
                     } else {
                         out.writeObject("Errore tabella inesitente");
-                        System.out.println("Tabella non accettata\n");
+                        System.out.println(nomeclient+": Tabella non accettata\n");
                         continue;
                     }
-                    System.out.println("Controllo: "+controllo);
-                    System.out.println("Nome tabella: "+tablename);
+                    System.out.println(nomeclient+": Controllo: "+controllo);
+                    System.out.println(nomeclient+": Nome tabella: "+tablename);
                 } else if (opzione == 2) {
-                    System.out.println("opzione: "+opzione);
+                    System.out.println(nomeclient+": opzione: "+opzione);
                     ArrayList<String> tb = getTables(c);
                     out.writeObject(tb);
                     controllo = (Integer) in.readObject();
@@ -70,16 +71,16 @@ public class ServerOneClient extends Thread{
                     if (controllo == 0) {
                         data = new Data(tablename);
                         out.writeObject("OK");
-                        System.out.println("Tabella accettata\n");
+                        System.out.println(nomeclient+": Tabella accettata\n");
                     }else {
                         out.writeObject("Errore tabella inesitente");
-                        System.out.println("Tabella non accettata\n");
+                        System.out.println(nomeclient+": Tabella non accettata\n");
                         continue;
                     }
                 }
-                System.out.println("In attesa della scelta (file o database)");
+                System.out.println(nomeclient+": In attesa della scelta (file o database)");
                 int scelta = (Integer) in.readObject();
-                System.out.println("Scelta: " + scelta);
+                System.out.println(nomeclient+": Scelta: " + scelta);
                 String tempfile,filename;
                 HierachicalClusterMiner clustering = null;
                 switch (scelta) {
@@ -87,7 +88,7 @@ public class ServerOneClient extends Thread{
                         ArrayList<String> list = showFile(tablename);
                         out.writeObject(list);
                         filename = tablename+"\\"+(String) in.readObject();
-                        System.out.println(filename);
+                        System.out.println(nomeclient+": "+filename);
                         if (existFile(filename)){
                             out.writeObject("OK");
                             clustering = HierachicalClusterMiner.loadHierachicalClusterMiner(filename);
@@ -110,7 +111,7 @@ public class ServerOneClient extends Thread{
                         String mess = "OK";
                         do {
                             int depth = (Integer) in.readObject();
-                            System.out.println("Profondità: " + depth);
+                            System.out.println(nomeclient+": Profondità: " + depth);
                             try {
                                 clustering = new HierachicalClusterMiner(depth);
                             } catch (InvalidDepthException e) {
@@ -134,7 +135,7 @@ public class ServerOneClient extends Thread{
             out.close();
         }catch (IOException | ClassNotFoundException | DatabaseConnectionException | SQLException | NoDataException |
                 InvalidDepthException e) {
-            System.out.println("Il client ha interrotto la connessione con l'errore:" + e);
+            System.out.println(nomeclient+": Il client ha interrotto la connessione con l'errore:" + e);
             try {
                 out.writeObject(e.toString());
             } catch (IOException ex) {
@@ -145,7 +146,7 @@ public class ServerOneClient extends Thread{
             try {
                 s.close();
             }catch (IOException e) {
-                System.out.println("Socket non chiuso");
+                System.out.println(nomeclient+": Socket non chiuso");
             }
         }
     }
